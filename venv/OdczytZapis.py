@@ -21,3 +21,4 @@ class OdczytZapis(object):
         # plik.close()
         self.root.nazwa_pliku = filedialog.asksavefilename(title='wybierz plik .txt, do którego chcesz zapisać zakodowany graf, lub kod Prüfera',filetypes=("dokument tekstowy","*.txt"))
         return self.root.nazwa_pliku
+        # x = input('Podaj x: ')

@@ -1,7 +1,7 @@
 import time
 import pygame as pg
 
-class GUI(object):
+class PyGameGUI(object):
 
     def __init__(self):
         self.tps_max = 100
