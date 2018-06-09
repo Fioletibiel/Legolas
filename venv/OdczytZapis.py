@@ -1,5 +1,9 @@
 from tkinter import *
 from tkinter import filedialog
+from graphviz import render
+from tkinter import *
+from PIL import ImageTk, Image
+from Prufer import Prufer
 
 
 class OdczytZapis(object):
@@ -7,40 +11,83 @@ class OdczytZapis(object):
     def __init__(self):
         self.root = Tk()
 
-
-    def odczytDOT():
-        plik_DOT = filedialog.askopenfilename(
-            filetypes=(("Text Documents", "*.txt"), ("DOT Files", "*.dot"), ("All files", "*.*")), title="Proszę wybierz plik z kodem DOT")
+    def DOT2Pic():
+        root2 = Toplevel()
+        plik_DOT = filedialog.askopenfilename(filetypes=(("Text Documents", "*.txt"), ("DOT Files", "*.dot"), ("All files", "*.*")), title="Proszę wybierz plik z kodem DOT")
         if plik_DOT:
             try:
-                print("""here it comes: self.settings["template"].set(fname)""")
+                print("Plik został wczytany pomyślnie.")
             except:
                 showerror("Open Source File", "Failed to read file\n'%s'" % plik_DOT)
-            return
-        return plik_DOT
+            obrazek = render('dot', 'png', plik_DOT)
+            obrazek = ImageTk.PhotoImage(Image.open(obrazek))
+            panel = Label(root2, image=obrazek)
+            panel.image = obrazek
+            panel.pack(side="top", fill="both", expand="yes")
 
-
-    def zapisPrufer():
-        plik_Prufer = filedialog.asksaveasfilename(
-            filetypes=(("Text Documents", "*.txt"), ("DOT Files", "*.dot"), ("All files", "*.*")),
-            title='Proszę wybierz plik .txt, do którego chcesz zapisać kod Prüfera namalowanego grafu.',
-            defaultextension='.txt')
+    def Prufer2Pic():
+        root2 = Toplevel()
+        plik_Prufer = filedialog.askopenfilename(filetypes=(("Text Documents", "*.txt"), ("All files", "*.*")), title="Proszę wybierz plik .txt z kodem Prüfera")
         if plik_Prufer:
             try:
-                print("""here it comes: self.settings["template"].set(fname)""")
+                print("Plik został wczytany pomyślnie.")
             except:
                 showerror("Open Source File", "Failed to read file\n'%s'" % plik_Prufer)
-            return
-        return plik_Prufer
-        plik = open(plik_Prufer, 'w')
-        plik.write("tresc")
-        plik.close()
+        tresc_pliku = open(plik_Prufer, 'w')
+        Prufer.checkifPrufer(tresc_pliku)
+        plik_DOT = Prufer.Prufer2DOT(tresc_pliku)
+        obrazek = render('dot', 'png', plik_DOT)
+        obrazek = ImageTk.PhotoImage(Image.open(obrazek))
+        panel = Label(root2, image=obrazek)
+        panel.image = obrazek
+        panel.pack(side="top", fill="both", expand="yes")
+
+    def DOT2Prufer():
+        plik_DOT = filedialog.askopenfilename(filetypes=(("Text Documents", "*.txt"), ("DOT Files", "*.dot"), ("All files", "*.*")), title="Proszę wybierz plik z kodem DOT")
+        if plik_DOT:
+            try:
+                print("Plik został wczytany pomyślnie.")
+            except:
+                showerror("Open Source File", "Failed to read file\n'%s'" % plik_DOT)
+            tresc_pliku = open(plik_DOT, 'w')
+            tresc_pliku = Prufer.DOT2Prufer(tresc_pliku)
+            plik_Prufer = filedialog.asksaveasfilename(
+                filetypes=(("Text Documents", "*.txt"), ("All files", "*.*")),
+                title='Proszę wybierz plik .txt, do którego chcesz zapisać kod Prüfera.',
+                defaultextension='.txt')
+            if plik_Prufer:
+                try:
+                    print("Plik został pomyślnie zapisany.")
+                except:
+                    showerror("Open Source File", "Failed to save file\n'%s'" % plik_Prufer)
+                plik = open(plik_Prufer, 'w')
+                plik.write(tresc_pliku)
+                plik.close()
+
+    def Prufer2DOT():
+        plik_Prufer = filedialog.askopenfilename(filetypes=(("Text Documents", "*.txt"), ("All files", "*.*")), title="Proszę wybierz plik .txt z kodem Prüfera")
+        if plik_Prufer:
+            try:
+                print("Plik został wczytany pomyślnie.")
+            except:
+                showerror("Open Source File", "Failed to read file\n'%s'" % plik_Prufer)
+            Prufer.checkifPrufer(plik_Prufer)
+            tresc_pliku = open(plik_Prufer, 'w')
+            Prufer.Prufer2DOT(tresc_pliku)
+            plik_DOT = filedialog.asksaveasfilename(filetypes=(("Text Documents", "*.txt"), ("DOT Files", "*.dot"), ("All files", "*.*")),title='Proszę wybierz plik .txt, do którego chcesz zapisać kod DOT.',defaultextension='.txt')
+            if plik_DOT:
+                try:
+                    print("Plik został pomyślnie zapisany.")
+                except:
+                    showerror("Open Source File", "Failed to save file\n'%s'" % plik_DOT)
+                plik = open(plik_DOT, 'w')
+                plik.write(tresc_pliku)
+                plik.close()
 
 
-    def zapisKurs():
-        plik_DOT = filedialog.asksaveasfilename(filetypes=(("Text Documents", "*.txt"), ("DOT Files", "*.dot"), ("All files", "*.*")),
-                                                        title='Proszę wybierz plik .txt, do którego chcesz zapisać kod DOT namalowanego grafu.',
-                                                        defaultextension='.txt')
+
+    def Kurs():
+        plik_DOT = filedialog.asksaveasfilename(filetypes=(("Text Documents", "*.txt"), ("DOT Files", "*.dot"), ("All files", "*.*")),title='Proszę wybierz plik .txt, do którego chcesz zapisać kod DOT namalowanego grafu.',defaultextension='.txt')
         if plik_DOT:
             try:
                 print("""here it comes: self.settings["template"].set(fname)""")
