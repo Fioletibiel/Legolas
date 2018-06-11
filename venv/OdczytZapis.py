@@ -5,6 +5,8 @@ from graphviz import *
 from tkinter import *
 from PIL import ImageTk, Image
 from Prufer import Prufer
+import random
+import string
 
 
 class OdczytZapis(object):
@@ -44,53 +46,62 @@ class OdczytZapis(object):
         panel.image = obrazek
         panel.pack(side="top", fill="both", expand="yes")
 
+
     l_ggn = 'a'
+    l_gge = 1
     g = Graph(format='png')
+    tablica_nazw_wierzcholkow = []
+    tablica_wybranych_przed_chwila = []
+
+    def randomowo(reset):
+        if reset == True:
+            OdczytZapis.tablica_wybranych_przed_chwila = []
+        while True:
+            r = random.choice(OdczytZapis.tablica_nazw_wierzcholkow)
+            b = True
+            for i in range(len(OdczytZapis.tablica_wybranych_przed_chwila)):
+                if r == OdczytZapis.tablica_wybranych_przed_chwila[i]:
+                    b = False
+            if b == True:
+                break
+        OdczytZapis.tablica_wybranych_przed_chwila.append(r)
+        return r
+
     def gen_graf_plus_node():
         OdczytZapis.g.node(str(OdczytZapis.l_ggn))
-        aski=ord(OdczytZapis.l_ggn)
-        aski+=1
-        OdczytZapis.l_ggn=chr(aski)
-        obrazek = g.render('dot', 'png')
+        OdczytZapis.tablica_nazw_wierzcholkow.append(str(OdczytZapis.l_ggn))
+        OdczytZapis.g.edge(OdczytZapis.randomowo(False),OdczytZapis.randomowo(True))
+        aski = ord(OdczytZapis.l_ggn)
+        aski += 1
+        OdczytZapis.l_ggn = chr(aski)
+        obrazek = OdczytZapis.g.render('dot', 'png')
         return obrazek
 
-    def gen_graf_plus_node_test():
-        l_ggn = 'a'
+
+
+
+    def gen_graf_plus_edge():
+        OdczytZapis.g.edge(label=OdczytZapis.l_gge, tail_name=random.choice(string.ascii_letters), head_name=random.choice(string.ascii_letters))
+        OdczytZapis.l_gge+=1
+        obrazek = OdczytZapis.g.render('dot', 'png')
+        return obrazek
+
+
+
+
+    def gen_graf_minus_node():
         g = Graph(format='png')
-        g.node(str(OdczytZapis.l_ggn))
-        aski=ord(OdczytZapis.l_ggn)
-        aski+=1
-        OdczytZapis.l_ggn=chr(aski)
-        g.node(str(OdczytZapis.l_ggn))
-        aski=ord(OdczytZapis.l_ggn)
-        aski+=1
-        OdczytZapis.l_ggn=chr(aski)
+        OdczytZapis.l_ggn -= 1
         obrazek = g.render('dot', 'png')
         print(obrazek)
 
-    # def random_node_name():
-    #     i = random.randomint(1,100)
-    #     return i
-    #
-    # l_gge = 'a'
-    # def gen_graf_plus_edge():
-    #     g = Graph(format='png')
-    #     g.edge(label=OdczytZapis.l_gge, tail_name=, head_name=)
-    #     OdczytZapis.l_gge+=1
-    #     obrazek = g.render('dot', 'png')
-    #     print(obrazek)
+    def gen_graf_minus_node():
+        g = Graph(format='png')
+        OdczytZapis.l_gge -= 1
+        obrazek = g.render('dot', 'png')
+        print(obrazek)
 
-    # def gen_graf_minus_node():
-    #     g = Graph(format='png')
-    #     OdczytZapis.l_ggn -= 1
-    #     obrazek = g.render('dot', 'png')
-    #     print(obrazek)
-    #
-    # def gen_graf_minus_node():
-    #     g = Graph(format='png')
-    #     OdczytZapis.l_gge -= 1
-    #     obrazek = g.render('dot', 'png')
-    #     print(obrazek)
+
 
 
 

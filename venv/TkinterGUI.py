@@ -5,6 +5,7 @@ from OdczytZapis import *
 from Graf import Graf
 from DOT import DOT
 from graphviz import render
+from graphviz import *
 from PIL import ImageTk, Image
 
 
@@ -30,39 +31,66 @@ class TkinterGUI(object):
         subMenu2.add_command(label="Do zrobienia 2", command=OdczytZapis.Kurs)
 
         img = Image.open("obrazki\PJATK_tlo_transparentne_wodne.png")
-        img = img.resize((250, 250), Image.ANTIALIAS)
+        # img = img.resize((250, 250), Image.ANTIALIAS)
         img = ImageTk.PhotoImage(img)
         tlo = Label(self.root, image=img)
         tlo.image = img
         tlo.pack(side="top", fill="both", expand="yes")
 
-        def nastepny_graf_na_tlo(event):
-            # img_update = Image.open(OdczytZapis.gen_graf_plus_node)
-            # img_update = img_update.resize((250, 250), Image.ANTIALIAS)
-            # img_update = ImageTk.PhotoImage(img_update)
-            # tlo.configure(image=img_update)
-            # tlo.image = img_update
-            print(OdczytZapis.gen_graf_plus_node)
+        def nastepny_wierzcholek_na_tlo(event):
+            graf = OdczytZapis.gen_graf_plus_node()
+            img_update = Image.open(graf)
+            img_update = ImageTk.PhotoImage(img_update)
+            tlo.configure(image=img_update)
+            tlo.image = img_update
+        def nastepna_krawedz_na_tlo(event):
+            graf = OdczytZapis.gen_graf_plus_edge()
+            img_update = Image.open(graf)
+            img_update = ImageTk.PhotoImage(img_update)
+            tlo.configure(image=img_update)
+            tlo.image = img_update
         def reset_tla(event):
             img_update = Image.open("obrazki\PJATK_tlo_transparentne_wodne.png")
-            img_update = img_update.resize((250, 250), Image.ANTIALIAS)
             img_update = ImageTk.PhotoImage(img_update)
             tlo.configure(image=img_update)
             tlo.image = img_update
-        def poprzedni_graf_na_tlo(event):
-            img_update = Image.open("obrazki\PJATK_tlo_transparentne_wodne_3.png")
-            img_update = img_update.resize((250, 250), Image.ANTIALIAS)
+        def poprzedni_wierzcholek_na_tlo(event):
+            graf = OdczytZapis.gen_graf_minus_node()
+            img_update = Image.open(graf)
             img_update = ImageTk.PhotoImage(img_update)
             tlo.configure(image=img_update)
             tlo.image = img_update
-        self.root.bind("<Button-1>", nastepny_graf_na_tlo)
-        self.root.bind("<Button-2>", reset_tla)
-        self.root.bind("<Button-3>", poprzedni_graf_na_tlo)
+        def poprzednia_krawedz_na_tlo(event):
+            graf = OdczytZapis.gen_graf_minus_edge()
+            img_update = Image.open(graf)
+            img_update = ImageTk.PhotoImage(img_update)
+            tlo.configure(image=img_update)
+            tlo.image = img_update
+        self.root.bind("<Button-1>", nastepny_wierzcholek_na_tlo)
+        self.root.bind("<Button-2>", nastepna_krawedz_na_tlo)
+        self.root.bind("<Double-Button-1>", reset_tla)
+        self.root.bind("<Button-3>", poprzedni_wierzcholek_na_tlo)
+        self.root.bind("<Double-Button-3>", poprzednia_krawedz_na_tlo)
 
         # frame = Frame(self.root, width=300, height=250)
         # frame.bind("<Button-1>", nastepny_graf_na_tlo)
         # frame.bind("<Button-2>", reset_tla)
         # frame.bind("<Button-3>", poprzedni_graf_na_tlo)
         # frame.pack()
+
+        # def gen_graf_plus_node_test2():
+        #     l_ggn = 'a'
+        #     g = Graph(format='png')
+        #     g.node(str(l_ggn))
+        #     aski = ord(l_ggn)
+        #     aski += 1
+        #     l_ggn = chr(aski)
+        #     g.node(str(l_ggn))
+        #     aski = ord(l_ggn)
+        #     aski += 1
+        #     l_ggn = chr(aski)
+        #     obrazek = g.render('dot', 'png')
+        #     print(obrazek)
+        # gen_graf_plus_node_test2()
 
         self.root.mainloop()
