@@ -8,4 +8,4 @@ from tkinter import *
 
 if __name__ == "__main__":
     TkinterGUI()
-    # Graf()
+    #OdczytZapis.gen_graf_plus_edge()

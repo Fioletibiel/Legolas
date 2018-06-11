@@ -1,6 +1,7 @@
 from tkinter import *
 import tkinter
 from OdczytZapis import OdczytZapis
+from OdczytZapis import *
 from Graf import Graf
 from DOT import DOT
 from graphviz import render
@@ -29,21 +30,30 @@ class TkinterGUI(object):
         subMenu2.add_command(label="Do zrobienia 2", command=OdczytZapis.Kurs)
 
         img = ImageTk.PhotoImage(Image.open("obrazki\PJATK_tlo_transparentne_wodne.png"))
-        panell = Label(self.root, image=img)
-        panell.image = img
-        panell.pack(side="top", fill="both", expand="yes")
+        tlo = Label(self.root, image=img)
+        tlo.image = img
+        tlo.pack(side="top", fill="both", expand="yes")
 
-        # bottomFrame = Frame(self.root).pack(side=BOTTOM)
-        # def leftClick(event):
-        #     print("Left")
-        # def middleClick(event):
-        #     print("Middle")
-        # def rightClick(event):
-        #     print("Right")
+        def nastepny_graf_na_tlo(event):
+            img_update = ImageTk.PhotoImage(Image.open("obrazki\PJATK_tlo_transparentne_wodne_2.png"))
+            tlo.configure(image=img_update)
+            tlo.image = img_update
+        def reset_tla(event):
+            img_update = ImageTk.PhotoImage(Image.open("obrazki\PJATK_tlo_transparentne_wodne.png"))
+            tlo.configure(image=img_update)
+            tlo.image = img_update
+        def poprzedni_graf_na_tlo(event):
+            img_update = ImageTk.PhotoImage(Image.open("obrazki\PJATK_tlo_transparentne_wodne_3.png"))
+            tlo.configure(image=img_update)
+            tlo.image = img_update
+        self.root.bind("<Button-1>", nastepny_graf_na_tlo)
+        self.root.bind("<Button-2>", reset_tla)
+        self.root.bind("<Button-3>", poprzedni_graf_na_tlo)
+
         # frame = Frame(self.root, width=300, height=250)
-        # frame.bind("<Button-1>", leftClick)
-        # frame.bind("<Button-2>", middleClick)
-        # frame.bind("<Button-3>", rightClick)
+        # frame.bind("<Button-1>", nastepny_graf_na_tlo)
+        # frame.bind("<Button-2>", reset_tla)
+        # frame.bind("<Button-3>", poprzedni_graf_na_tlo)
         # frame.pack()
 
         self.root.mainloop()

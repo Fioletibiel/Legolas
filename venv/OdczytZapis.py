@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter import filedialog
 from graphviz import render
+from graphviz import *
 from tkinter import *
 from PIL import ImageTk, Image
 from Prufer import Prufer
@@ -8,8 +9,9 @@ from Prufer import Prufer
 
 class OdczytZapis(object):
 
+
     def __init__(self):
-        self.root = Tk()
+        self.root = Toplevel()
 
     def DOT2Pic():
         root2 = Toplevel()
@@ -41,6 +43,40 @@ class OdczytZapis(object):
         panel = Label(root2, image=obrazek)
         panel.image = obrazek
         panel.pack(side="top", fill="both", expand="yes")
+
+    l_ggn = 0
+    def gen_graf_plus_node():
+        g = Graph(format='png')
+        g.node(str(l_ggn))
+        OdczytZapis.l_ggn+=1
+        obrazek = g.render('dot', 'png')
+        print(obrazek)
+
+    # def random_node_name():
+    #     i = random.randomint(1,100)
+    #     return i
+    #
+    # l_gge = 'a'
+    # def gen_graf_plus_edge():
+    #     g = Graph(format='png')
+    #     g.edge(label=OdczytZapis.l_gge, tail_name=, head_name=)
+    #     OdczytZapis.l_gge+=1
+    #     obrazek = g.render('dot', 'png')
+    #     print(obrazek)
+
+    # def gen_graf_minus_node():
+    #     g = Graph(format='png')
+    #     OdczytZapis.l_ggn -= 1
+    #     obrazek = g.render('dot', 'png')
+    #     print(obrazek)
+    #
+    # def gen_graf_minus_node():
+    #     g = Graph(format='png')
+    #     OdczytZapis.l_gge -= 1
+    #     obrazek = g.render('dot', 'png')
+    #     print(obrazek)
+
+
 
     def DOT2Prufer():
         plik_DOT = filedialog.askopenfilename(filetypes=(("Text Documents", "*.txt"), ("DOT Files", "*.dot"), ("All files", "*.*")), title="Proszę wybierz plik z kodem DOT")

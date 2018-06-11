@@ -15,4 +15,3 @@ class Prufer(object):
 
     def checkifPrufer(tresc_pliku):
         return tresc_pliku
-
