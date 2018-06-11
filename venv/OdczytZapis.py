@@ -44,11 +44,27 @@ class OdczytZapis(object):
         panel.image = obrazek
         panel.pack(side="top", fill="both", expand="yes")
 
-    l_ggn = 0
+    l_ggn = 'a'
+    g = Graph(format='png')
     def gen_graf_plus_node():
+        OdczytZapis.g.node(str(OdczytZapis.l_ggn))
+        aski=ord(OdczytZapis.l_ggn)
+        aski+=1
+        OdczytZapis.l_ggn=chr(aski)
+        obrazek = g.render('dot', 'png')
+        return obrazek
+
+    def gen_graf_plus_node_test():
+        l_ggn = 'a'
         g = Graph(format='png')
-        g.node(str(l_ggn))
-        OdczytZapis.l_ggn+=1
+        g.node(str(OdczytZapis.l_ggn))
+        aski=ord(OdczytZapis.l_ggn)
+        aski+=1
+        OdczytZapis.l_ggn=chr(aski)
+        g.node(str(OdczytZapis.l_ggn))
+        aski=ord(OdczytZapis.l_ggn)
+        aski+=1
+        OdczytZapis.l_ggn=chr(aski)
         obrazek = g.render('dot', 'png')
         print(obrazek)
 

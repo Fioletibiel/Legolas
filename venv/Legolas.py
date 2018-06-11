@@ -7,5 +7,5 @@ from tkinter import *
 
 
 if __name__ == "__main__":
-    TkinterGUI()
-    #OdczytZapis.gen_graf_plus_edge()
+    # TkinterGUI()
+    OdczytZapis.gen_graf_plus_node_test()
