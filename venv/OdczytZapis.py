@@ -84,6 +84,11 @@ class OdczytZapis(object):
                 plik.write(tresc_pliku)
                 plik.close()
 
+    def Pic2DOT():
+        pass
+
+    def Pic2Prufer():
+        pass
 
 
     def Kurs():

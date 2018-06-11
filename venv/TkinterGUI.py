@@ -12,8 +12,8 @@ class TkinterGUI(object):
     def __init__(self):
         self.root = Tk()
         # self.root.geometry("200x250")
-        self.root.title('GIZ projekt')
-        self.root.iconbitmap('obrazki\celtic_tree.ico')
+        self.root.title('GIZ projekt, Autor: Paweł Kamiński')
+        self.root.iconbitmap('obrazki\PJATK_icon_transparent.ico')
 
         menu = Menu(self.root)
         self.root.config(menu=menu)
@@ -28,7 +28,7 @@ class TkinterGUI(object):
         subMenu2.add_command(label="Do zrobienia 1", command=OdczytZapis.Kurs)
         subMenu2.add_command(label="Do zrobienia 2", command=OdczytZapis.Kurs)
 
-        img = ImageTk.PhotoImage(Image.open("obrazki\celtic_tree_2_2.png"))
+        img = ImageTk.PhotoImage(Image.open("obrazki\PJATK_tlo_transparentne_wodne.png"))
         panell = Label(self.root, image=img)
         panell.image = img
         panell.pack(side="top", fill="both", expand="yes")
