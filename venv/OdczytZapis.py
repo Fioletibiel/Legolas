@@ -52,23 +52,9 @@ class OdczytZapis(object):
     g = Graph(format='png')
     tablica_nazw_wierzcholkow = []
     wybrana_randomowa_przed_chwila = 'a'
-    tablica_wybranych_randomowych = []
-
-
-    def randomowo_od():
-        # while True:
-        #     r = random.choice(OdczytZapis.tablica_nazw_wierzcholkow)
-        #     b = False
-        #     for i in range(len(OdczytZapis.tablica_wybranych_randomowych)):
-        #         if r != OdczytZapis.tablica_wybranych_randomowych[i]:
-        #             b = True
-        #     if b == True:
-        #         break
-        r = OdczytZapis.tablica_nazw_wierzcholkow[-1]
-        OdczytZapis.tablica_wybranych_randomowych.append(r)
-        OdczytZapis.wybrana_randomowa_przed_chwila = r
-        return r
-
+    tablica_wybranych_randomowych_od = []
+    tablica_wybranych_randomowych_do = []
+    tablica_wybranych_randomowych = [[]]
 
 
     def gen_graf_plus_edge():
@@ -171,14 +157,24 @@ class OdczytZapis(object):
         aski += 1
         OdczytZapis.l_ggn = chr(aski)
 
+    def randomowo_od():
+        r = random.choice(OdczytZapis.tablica_nazw_wierzcholkow)
+        # r = OdczytZapis.tablica_nazw_wierzcholkow[-1]
+        OdczytZapis.tablica_wybranych_randomowych_od.append(r)
+        OdczytZapis.wybrana_randomowa_przed_chwila = r
+        return r
+
     def randomowo_do():
         while True:
             r = random.choice(OdczytZapis.tablica_nazw_wierzcholkow)
             b = False
-            if r != OdczytZapis.wybrana_randomowa_przed_chwila[0]:
+            if r != OdczytZapis.wybrana_randomowa_przed_chwila[0] and (r,OdczytZapis.wybrana_randomowa_przed_chwila[0]) != OdczytZapis.tablica_wybranych_randomowych :
                 b = True
             if b == True:
                 break
+        OdczytZapis.tablica_wybranych_randomowych_do.append(r)
+        OdczytZapis.tablica_wybranych_randomowych.append(OdczytZapis.tablica_wybranych_randomowych_od[-1])
+        OdczytZapis.tablica_wybranych_randomowych.append([OdczytZapis.tablica_wybranych_randomowych_do[-1]])
         OdczytZapis.wybrana_randomowa_przed_chwila = 'a'
         return r
 

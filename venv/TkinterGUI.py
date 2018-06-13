@@ -43,22 +43,26 @@ class TkinterGUI(object):
             img_update = ImageTk.PhotoImage(img_update)
             tlo.configure(image=img_update)
             tlo.image = img_update
+            OdczytZapis.l_gge += 1
         def nastepna_krawedz_na_tlo(event):
-            graf = OdczytZapis.gen_graf_plus_edge()
-            img_update = Image.open(graf)
-            img_update = ImageTk.PhotoImage(img_update)
-            tlo.configure(image=img_update)
-            tlo.image = img_update
+            if(OdczytZapis.l_gge>=2):
+                graf = OdczytZapis.gen_graf_plus_edge()
+                img_update = Image.open(graf)
+                img_update = ImageTk.PhotoImage(img_update)
+                tlo.configure(image=img_update)
+                tlo.image = img_update
+            else:
+                pass
         def reset_tla(event):
             img_update = Image.open("obrazki\PJATK_tlo_transparentne_wodne.png")
             img_update = ImageTk.PhotoImage(img_update)
             tlo.configure(image=img_update)
             tlo.image = img_update
-            oz.l_ggn = 'a'
-            oz.l_gge = 1
-            oz.g = Graph(format='png')
-            oz.tablica_nazw_wierzcholkow = []
-            oz.tablica_wybranych_przed_chwila = []
+            OdczytZapis.l_ggn = 'a'
+            OdczytZapis.l_gge = 0
+            OdczytZapis.g = Graph(format='png')
+            OdczytZapis.tablica_nazw_wierzcholkow = []
+            OdczytZapis.tablica_wybranych_przed_chwila = []
         def poprzedni_wierzcholek_na_tlo(event):
             graf = OdczytZapis.gen_graf_minus_node()
             img_update = Image.open(graf)
