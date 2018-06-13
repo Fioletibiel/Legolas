@@ -48,43 +48,41 @@ class OdczytZapis(object):
 
 
     l_ggn = 'a'
-    l_gge = 1
+    l_gge = 0
     g = Graph(format='png')
     tablica_nazw_wierzcholkow = []
-    tablica_wybranych_przed_chwila = []
+    wybrana_randomowa_przed_chwila = 'a'
+    tablica_wybranych_randomowych = []
 
-    def randomowo(reset):
-        if reset == True:
-            OdczytZapis.tablica_wybranych_przed_chwila = []
-        while True:
-            r = random.choice(OdczytZapis.tablica_nazw_wierzcholkow)
-            b = True
-            for i in range(len(OdczytZapis.tablica_wybranych_przed_chwila)):
-                if r == OdczytZapis.tablica_wybranych_przed_chwila[i]:
-                    b = False
-            if b == True:
-                break
-        OdczytZapis.tablica_wybranych_przed_chwila.append(r)
+
+    def randomowo_od():
+        # while True:
+        #     r = random.choice(OdczytZapis.tablica_nazw_wierzcholkow)
+        #     b = False
+        #     for i in range(len(OdczytZapis.tablica_wybranych_randomowych)):
+        #         if r != OdczytZapis.tablica_wybranych_randomowych[i]:
+        #             b = True
+        #     if b == True:
+        #         break
+        r = OdczytZapis.tablica_nazw_wierzcholkow[-1]
+        OdczytZapis.tablica_wybranych_randomowych.append(r)
+        OdczytZapis.wybrana_randomowa_przed_chwila = r
         return r
-
-    def gen_graf_plus_node():
-        OdczytZapis.g.node(str(OdczytZapis.l_ggn))
-        OdczytZapis.tablica_nazw_wierzcholkow.append(str(OdczytZapis.l_ggn))
-        OdczytZapis.g.edge(OdczytZapis.randomowo(False),OdczytZapis.randomowo(True))
-        aski = ord(OdczytZapis.l_ggn)
-        aski += 1
-        OdczytZapis.l_ggn = chr(aski)
-        obrazek = OdczytZapis.g.render('dot', 'png')
-        return obrazek
-
 
 
 
     def gen_graf_plus_edge():
-        OdczytZapis.g.edge(label=OdczytZapis.l_gge, tail_name=random.choice(string.ascii_letters), head_name=random.choice(string.ascii_letters))
-        OdczytZapis.l_gge+=1
+        OdczytZapis.g.edge(OdczytZapis.randomowo_od(),OdczytZapis.randomowo_do())
         obrazek = OdczytZapis.g.render('dot', 'png')
         return obrazek
+
+    def gen_graf_plus_node():
+        OdczytZapis.g.node(str(OdczytZapis.l_ggn))
+        OdczytZapis.tablica_nazw_wierzcholkow.append(str(OdczytZapis.l_ggn))
+        OdczytZapis.zwieksz_lggn()
+        obrazek = OdczytZapis.g.render('dot', 'png')
+        return obrazek
+
 
 
 
@@ -152,6 +150,37 @@ class OdczytZapis(object):
 
     def Pic2Prufer():
         pass
+
+
+    # def randomowo(reset):
+    #     if reset == True:
+    #         OdczytZapis.tablica_wybranych_przed_chwila = []
+    #     while True:
+    #         r = random.choice(OdczytZapis.tablica_nazw_wierzcholkow)
+    #         b = True
+    #         for i in range(len(OdczytZapis.tablica_wybranych_przed_chwila)):
+    #             if r == OdczytZapis.tablica_wybranych_przed_chwila[i]:
+    #                 b = False
+    #         if b == True:
+    #             break
+    #     OdczytZapis.tablica_wybranych_przed_chwila.append(r)
+    #     return r
+
+    def zwieksz_lggn():
+        aski = ord(OdczytZapis.l_ggn)
+        aski += 1
+        OdczytZapis.l_ggn = chr(aski)
+
+    def randomowo_do():
+        while True:
+            r = random.choice(OdczytZapis.tablica_nazw_wierzcholkow)
+            b = False
+            if r != OdczytZapis.wybrana_randomowa_przed_chwila[0]:
+                b = True
+            if b == True:
+                break
+        OdczytZapis.wybrana_randomowa_przed_chwila = 'a'
+        return r
 
 
     def Kurs():
