@@ -1,6 +1,6 @@
 from tkinter import *
 import tkinter
-from OdczytZapis import OdczytZapis
+from OdczytZapis import OdczytZapis as oz
 from OdczytZapis import *
 from Graf import Graf
 from DOT import DOT
@@ -21,14 +21,14 @@ class TkinterGUI(object):
         self.root.config(menu=menu)
         subMenu1 = Menu(menu)
         menu.add_cascade(label="Kod Prüfera", menu=subMenu1)
-        subMenu1.add_command(label="DOT->Graf", command=OdczytZapis.DOT2Pic)
-        subMenu1.add_command(label="Prüfer->Graf", command=OdczytZapis.Prufer2Pic)
-        subMenu1.add_command(label="DOT->Prüfer", command=OdczytZapis.DOT2Prufer)
-        subMenu1.add_command(label="Prüfer->DOT", command=OdczytZapis.Prufer2DOT)
+        subMenu1.add_command(label="DOT->Graf", command=oz.DOT2Pic)
+        subMenu1.add_command(label="Prüfer->Graf", command=oz.Prufer2Pic)
+        subMenu1.add_command(label="DOT->Prüfer", command=oz.DOT2Prufer)
+        subMenu1.add_command(label="Prüfer->DOT", command=oz.Prufer2DOT)
         subMenu2 = Menu(menu)
         menu.add_cascade(label="Lista kursów", menu=subMenu2)
-        subMenu2.add_command(label="Do zrobienia 1", command=OdczytZapis.Kurs)
-        subMenu2.add_command(label="Do zrobienia 2", command=OdczytZapis.Kurs)
+        subMenu2.add_command(label="Do zrobienia 1", command=oz.Kurs)
+        subMenu2.add_command(label="Do zrobienia 2", command=oz.Kurs)
 
         img = Image.open("obrazki\PJATK_tlo_transparentne_wodne.png")
         # img = img.resize((250, 250), Image.ANTIALIAS)
@@ -38,13 +38,13 @@ class TkinterGUI(object):
         tlo.pack(side="top", fill="both", expand="yes")
 
         def nastepny_wierzcholek_na_tlo(event):
-            graf = OdczytZapis.gen_graf_plus_node()
+            graf = oz.gen_graf_plus_node()
             img_update = Image.open(graf)
             img_update = ImageTk.PhotoImage(img_update)
             tlo.configure(image=img_update)
             tlo.image = img_update
         def nastepna_krawedz_na_tlo(event):
-            graf = OdczytZapis.gen_graf_plus_edge()
+            graf = oz.gen_graf_plus_edge()
             img_update = Image.open(graf)
             img_update = ImageTk.PhotoImage(img_update)
             tlo.configure(image=img_update)
@@ -54,23 +54,28 @@ class TkinterGUI(object):
             img_update = ImageTk.PhotoImage(img_update)
             tlo.configure(image=img_update)
             tlo.image = img_update
+            oz.l_ggn = 'a'
+            oz.l_gge = 1
+            oz.g = Graph(format='png')
+            oz.tablica_nazw_wierzcholkow = []
+            oz.tablica_wybranych_przed_chwila = []
         def poprzedni_wierzcholek_na_tlo(event):
-            graf = OdczytZapis.gen_graf_minus_node()
+            graf = oz.gen_graf_minus_node()
             img_update = Image.open(graf)
             img_update = ImageTk.PhotoImage(img_update)
             tlo.configure(image=img_update)
             tlo.image = img_update
         def poprzednia_krawedz_na_tlo(event):
-            graf = OdczytZapis.gen_graf_minus_edge()
+            graf = oz.gen_graf_minus_edge()
             img_update = Image.open(graf)
             img_update = ImageTk.PhotoImage(img_update)
             tlo.configure(image=img_update)
             tlo.image = img_update
         self.root.bind("<Button-1>", nastepny_wierzcholek_na_tlo)
-        self.root.bind("<Button-2>", nastepna_krawedz_na_tlo)
-        self.root.bind("<Double-Button-1>", reset_tla)
-        self.root.bind("<Button-3>", poprzedni_wierzcholek_na_tlo)
-        self.root.bind("<Double-Button-3>", poprzednia_krawedz_na_tlo)
+        self.root.bind("<Button-3>", nastepna_krawedz_na_tlo)
+        self.root.bind("<Button-2>", reset_tla)
+        # self.root.bind("<Double-Button-1>", poprzedni_wierzcholek_na_tlo)
+        # self.root.bind("<Double-Button-3>", poprzednia_krawedz_na_tlo)
 
         # frame = Frame(self.root, width=300, height=250)
         # frame.bind("<Button-1>", nastepny_graf_na_tlo)
