@@ -5,6 +5,7 @@ from Prufer import Prufer
 from OdczytZapis import OdczytZapis
 from OdczytZapis import *
 from tkinter import *
+import numpy as np
 
 
 if __name__ == "__main__":
