@@ -7,6 +7,8 @@ from PIL import ImageTk, Image
 from Prufer import Prufer
 import random
 import string
+# import sys
+# sys.setrecursionlimit(10000)
 
 
 class OdczytZapis(object):
@@ -138,101 +140,61 @@ class OdczytZapis(object):
         obrazek = OdczytZapis.g.render('dot', 'png')
         return obrazek
 
+    def liscie_od_najmniejszego_do_najwiekszego():
+        # wyciagniecie tablicy lisci:
+        tablica_lisci = []
+        b = True
+        for i in range(len(OdczytZapis.tablica_wybranych_randomowych_od)):
+            for j in range(len(OdczytZapis.tablica_wybranych_randomowych_do)):
+                if OdczytZapis.tablica_wybranych_randomowych_od[i] == OdczytZapis.tablica_wybranych_randomowych_do[j]:
+                    b = False
+            if b == True:
+                tablica_lisci.append(OdczytZapis.tablica_wybranych_randomowych_od[i])
+        # posortowanie tablicy lisci:
+        tablica_lisci.sort()
+        return tablica_lisci
 
+    def ten_z_ktorym_sie_laczy(usuwany_element):
+        bufor = 0
+        for i in range(len(OdczytZapis.tablica_wybranych_randomowych_od)):
+            if usuwany_element == OdczytZapis.tablica_wybranych_randomowych_od[i]:
+                bufor = i
+        dodawany_element = OdczytZapis.tablica_wybranych_randomowych_do[bufor]
+        return dodawany_element
 
+    def Pic2Prufer_konwersja():
+        tablica_lisci = OdczytZapis.liscie_od_najmniejszego_do_najwiekszego()
+        tablica_lisci_pomniejszona = tablica_lisci
+        tabela_Prufera = []
+        for i in range(len(tablica_lisci)-2):
+            usuwany_element = tablica_lisci[i]
+            tablica_lisci_pomniejszona.remove(usuwany_element)     # usuwa najmniejszy lisc
+            dodawany_element = ten_z_ktorym_sie_laczy(usuwany_element)
+            tabela_Prufera.append(dodawany_element)     # tu musimy dodac wierzcholek, z ktorym sie usuniety najmniejszy lisc laczyl, co liczymy powyzej
+        trescpliku = ', '.join(str(e) for e in tabela_Prufera)
+        print(trescpliku)       # coś tu nie gra, bo treść jest pusta :/
+        print(tabela_Prufera)
+        return trescpliku
 
-    # def DOT2Pic():
-    #     root2 = Toplevel()
-    #     plik_DOT = filedialog.askopenfilename(filetypes=(("Text Documents", "*.txt"), ("DOT Files", "*.dot"), ("All files", "*.*")), title="Proszę wybierz plik z kodem DOT")
-    #     if plik_DOT:
-    #         try:
-    #             print("Plik został wczytany pomyślnie.")
-    #         except:
-    #             showerror("Open Source File", "Failed to read file\n'%s'" % plik_DOT)
-    #         obrazek = render('dot', 'png', plik_DOT)
-    #         obrazek = ImageTk.PhotoImage(Image.open(obrazek))
-    #         panel = Label(root2, image=obrazek)
-    #         panel.image = obrazek
-    #         panel.pack(side="top", fill="both", expand="yes")
-    #
-    # def Prufer2Pic():
-    #     root2 = Toplevel()
-    #     plik_Prufer = filedialog.askopenfilename(filetypes=(("Text Documents", "*.txt"), ("All files", "*.*")), title="Proszę wybierz plik .txt z kodem Prüfera")
-    #     if plik_Prufer:
-    #         try:
-    #             print("Plik został wczytany pomyślnie.")
-    #         except:
-    #             showerror("Open Source File", "Failed to read file\n'%s'" % plik_Prufer)
-    #     tresc_pliku = open(plik_Prufer, 'w')
-    #     Prufer.checkifPrufer(tresc_pliku)
-    #     plik_DOT = Prufer.Prufer2DOT(tresc_pliku)
-    #     obrazek = render('dot', 'png', plik_DOT)
-    #     obrazek = ImageTk.PhotoImage(Image.open(obrazek))
-    #     panel = Label(root2, image=obrazek)
-    #     panel.image = obrazek
-    #     panel.pack(side="top", fill="both", expand="yes")
-
-
-    def DOT2Prufer():
-        plik_DOT = filedialog.askopenfilename(filetypes=(("Text Documents", "*.txt"), ("DOT Files", "*.dot"), ("All files", "*.*")), title="Proszę wybierz plik z kodem DOT")
-        if plik_DOT:
-            try:
-                print("Plik został wczytany pomyślnie.")
-            except:
-                showerror("Open Source File", "Failed to read file\n'%s'" % plik_DOT)
-            tresc_pliku = open(plik_DOT, 'w')
-            tresc_pliku = Prufer.DOT2Prufer(tresc_pliku)
-            plik_Prufer = filedialog.asksaveasfilename(
-                filetypes=(("Text Documents", "*.txt"), ("All files", "*.*")),
-                title='Proszę wybierz plik .txt, do którego chcesz zapisać kod Prüfera.',
-                defaultextension='.txt')
-            if plik_Prufer:
-                try:
-                    print("Plik został pomyślnie zapisany.")
-                except:
-                    showerror("Open Source File", "Failed to save file\n'%s'" % plik_Prufer)
-                plik = open(plik_Prufer, 'w')
-                plik.write(tresc_pliku)
-                plik.close()
-
-    def Prufer2DOT():
-        plik_Prufer = filedialog.askopenfilename(filetypes=(("Text Documents", "*.txt"), ("All files", "*.*")), title="Proszę wybierz plik .txt z kodem Prüfera")
+    def Pic2Prufer():
+        tresc_pliku = OdczytZapis.Pic2Prufer_konwersja()
+        plik_Prufer = filedialog.asksaveasfilename(
+            filetypes=(("Text Documents", "*.txt"), ("All files", "*.*")),
+            title='Proszę wybierz plik .txt, do którego chcesz zapisać kod Prüfera.',
+            defaultextension='.txt')
         if plik_Prufer:
             try:
-                print("Plik został wczytany pomyślnie.")
+                print("Plik został pomyślnie zapisany.")
             except:
-                showerror("Open Source File", "Failed to read file\n'%s'" % plik_Prufer)
-            Prufer.checkifPrufer(plik_Prufer)
-            tresc_pliku = open(plik_Prufer, 'w')
-            Prufer.Prufer2DOT(tresc_pliku)
-            plik_DOT = filedialog.asksaveasfilename(filetypes=(("Text Documents", "*.txt"), ("DOT Files", "*.dot"), ("All files", "*.*")),title='Proszę wybierz plik .txt, do którego chcesz zapisać kod DOT.',defaultextension='.txt')
-            if plik_DOT:
-                try:
-                    print("Plik został pomyślnie zapisany.")
-                except:
-                    showerror("Open Source File", "Failed to save file\n'%s'" % plik_DOT)
-                plik = open(plik_DOT, 'w')
-                plik.write(tresc_pliku)
-                plik.close()
+                showerror("Open Source File", "Failed to save file\n'%s'" % plik_Prufer)
+            plik = open(plik_Prufer, 'w')
+            plik.write(tresc_pliku)
+            plik.close()
 
     def Pic2DOT():
         pass
 
-    def Pic2Prufer():
-        pass
-
-
-
-
-
-
-
-
-
-
-
-
-    def Kurs():
+    def Tekst2Wynik():
         plik_DOT = filedialog.asksaveasfilename(filetypes=(("Text Documents", "*.txt"), ("DOT Files", "*.dot"), ("All files", "*.*")),title='Proszę wybierz plik .txt, do którego chcesz zapisać kod DOT namalowanego grafu.',defaultextension='.txt')
         if plik_DOT:
             try:
@@ -244,3 +206,13 @@ class OdczytZapis(object):
         plik = open(plik_DOT, 'w')
         plik.write("tresc")
         plik.close()
+
+    def Pic2Wynik():
+        pass
+
+    # Zrobić:
+    # 1) Pic2Prufer_konwersja():
+    # 2) Pic2DOT():
+    # 3) Prufer2Pic():
+    # 4) Pic2DOT():
+    # 5) Pic2Wynik():

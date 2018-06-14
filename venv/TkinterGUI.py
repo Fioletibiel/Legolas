@@ -49,14 +49,16 @@ class TkinterGUI(object):
         self.root.config(menu=menu)
         subMenu1 = Menu(menu)
         menu.add_cascade(label="Kod Prüfera", menu=subMenu1)
-        subMenu1.add_command(label="DOT->Graf", command=DOT2Pic)
-        subMenu1.add_command(label="Prüfer->Graf", command=Prufer2Pic)
-        subMenu1.add_command(label="DOT->Prüfer", command=OdczytZapis.DOT2Prufer)
-        subMenu1.add_command(label="Prüfer->DOT", command=OdczytZapis.Prufer2DOT)
+        subMenu1.add_command(label="DOT->Picture", command=DOT2Pic)
+        subMenu1.add_command(label="Prüfer->Picture", command=Prufer2Pic)
+        subMenu1.add_command(label="Picture->Prüfer", command=OdczytZapis.Pic2Prufer)
+        subMenu1.add_command(label="Picture->DOT", command=OdczytZapis.Pic2DOT)
+        # subMenu1.add_command(label="DOT->Prüfer", command=OdczytZapis.DOT2Prufer)
+        # subMenu1.add_command(label="Prüfer->DOT", command=OdczytZapis.Prufer2DOT)
         subMenu2 = Menu(menu)
-        menu.add_cascade(label="Lista kursów", menu=subMenu2)
-        subMenu2.add_command(label="Do zrobienia 1", command=OdczytZapis.Kurs)
-        subMenu2.add_command(label="Do zrobienia 2", command=OdczytZapis.Kurs)
+        menu.add_cascade(label="Kursy", menu=subMenu2)
+        subMenu2.add_command(label="Tekst->Wynik", command=OdczytZapis.Tekst2Wynik())
+        subMenu2.add_command(label="Picture->Wynik", command=OdczytZapis.Pic2Wynik)
 
         img = Image.open("obrazki\PJATK_tlo_transparentne_wodne.png")
         # img = img.resize((250, 250), Image.ANTIALIAS)
@@ -65,21 +67,7 @@ class TkinterGUI(object):
         tlo.image = img
         tlo.pack(side="top", fill="both", expand="yes")
 
-        # def nastepny_wierzcholek_na_tlo(event):
-        #     graf = OdczytZapis.gen_graf_plus_node()
-        #     img_update = Image.open(graf)
-        #     img_update = ImageTk.PhotoImage(img_update)
-        #     tlo.configure(image=img_update)
-        #     tlo.image = img_update
-        # def nastepna_krawedz_na_tlo(event):
-        #     if(OdczytZapis.l_ggn>=1):
-        #         graf = OdczytZapis.gen_graf_plus_edge()
-        #         img_update = Image.open(graf)
-        #         img_update = ImageTk.PhotoImage(img_update)
-        #         tlo.configure(image=img_update)
-        #         tlo.image = img_update
-        #     else:
-        #         pass
+
         def nastepny_wierzcholek(event):
             OdczytZapis.l_ggn += 1
             graf = OdczytZapis.gen_tree_plus_node()
@@ -94,14 +82,11 @@ class TkinterGUI(object):
             tlo.image = img_update
             OdczytZapis.node_name = 'a'
             OdczytZapis.l_ggn = 0
-            # OdczytZapis.l_ggn = 'a'
-            # OdczytZapis.l_gge = 0
             OdczytZapis.g = Graph(format='png')
             OdczytZapis.tablica_nazw_wierzcholkow = []
             OdczytZapis.tablica_wybranych_przed_chwila = []
 
         self.root.bind("<Button-1>", nastepny_wierzcholek)
-        # self.root.bind("<Button-2>", nastepna_krawedz_na_tlo)
         self.root.bind("<Button-3>", reset_tla)
 
 
