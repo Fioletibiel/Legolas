@@ -50,9 +50,10 @@ class TkinterGUI(object):
         subMenu1 = Menu(menu)
         menu.add_cascade(label="Kod Prüfera", menu=subMenu1)
         subMenu1.add_command(label="DOT->Picture", command=DOT2Pic)
+        subMenu1.add_command(label="Picture->DOT", command=OdczytZapis.Pic2DOT)
         subMenu1.add_command(label="Prüfer->Picture", command=Prufer2Pic)
         subMenu1.add_command(label="Picture->Prüfer", command=OdczytZapis.Pic2Prufer)
-        subMenu1.add_command(label="Picture->DOT", command=OdczytZapis.Pic2DOT)
+
         # subMenu1.add_command(label="DOT->Prüfer", command=OdczytZapis.DOT2Prufer)
         # subMenu1.add_command(label="Prüfer->DOT", command=OdczytZapis.Prufer2DOT)
         subMenu2 = Menu(menu)

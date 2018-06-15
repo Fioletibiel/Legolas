@@ -162,6 +162,17 @@ class OdczytZapis(object):
         dodawany_element = OdczytZapis.tablica_wybranych_randomowych_do[bufor]
         return dodawany_element
 
+    def Pic2DOT():
+        plik_DOT = filedialog.asksaveasfilename(
+            filetypes=(("Text Documents", "*.txt"), ("DOT Files", "*.dot"), ("All files", "*.*")),
+            title="Proszę wybierz plik, do którego chcesz zapisać kod DOT.")
+        if plik_DOT:
+            try:
+                print("Plik został zapisany pomyślnie.")
+            except:
+                showerror("Open Source File", "Failed to read file\n'%s'" % plik_DOT)
+            OdczytZapis.g.render(plik_DOT)
+
     def Pic2Prufer_konwersja():
         tablica_lisci = OdczytZapis.liscie_od_najmniejszego_do_najwiekszego()
         tablica_lisci_pomniejszona = tablica_lisci
@@ -189,30 +200,30 @@ class OdczytZapis(object):
                 showerror("Open Source File", "Failed to save file\n'%s'" % plik_Prufer)
             plik = open(plik_Prufer, 'w')
             plik.write(tresc_pliku)
-            plik.close()
+            plik.close
 
-    def Pic2DOT():
-        pass
+
 
     def Tekst2Wynik():
-        plik_DOT = filedialog.asksaveasfilename(filetypes=(("Text Documents", "*.txt"), ("DOT Files", "*.dot"), ("All files", "*.*")),title='Proszę wybierz plik .txt, do którego chcesz zapisać kod DOT namalowanego grafu.',defaultextension='.txt')
-        if plik_DOT:
-            try:
-                print("""here it comes: self.settings["template"].set(fname)""")
-            except:
-                showerror("Open Source File", "Failed to read file\n'%s'" % plik_DOT)
-            return
-        return plik_DOT
-        plik = open(plik_DOT, 'w')
-        plik.write("tresc")
-        plik.close()
+        # plik_DOT = filedialog.asksaveasfilename(filetypes=(("Text Documents", "*.txt"), ("DOT Files", "*.dot"), ("All files", "*.*")),title='Proszę wybierz plik .txt, do którego chcesz zapisać kod DOT namalowanego grafu.',defaultextension='.txt')
+        # if plik_DOT:
+        #     try:
+        #         print("""here it comes: self.settings["template"].set(fname)""")
+        #     except:
+        #         showerror("Open Source File", "Failed to read file\n'%s'" % plik_DOT)
+        #     return
+        # return plik_DOT
+        # plik = open(plik_DOT, 'w')
+        # plik.write("tresc")
+        # plik.close()
+        pass
 
     def Pic2Wynik():
         pass
 
     # Zrobić:
     # 1) Pic2Prufer_konwersja():
-    # 2) Pic2DOT():
-    # 3) Prufer2Pic():
-    # 4) Pic2DOT():
-    # 5) Pic2Wynik():
+    # 2) Prufer2Pic():
+
+    # 3) Tekst2Wynik
+    # 4) Pic2Wynik():
