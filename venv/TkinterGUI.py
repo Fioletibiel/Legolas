@@ -19,7 +19,7 @@ class TkinterGUI(object):
         self.root.iconbitmap('obrazki\PJATK_icon_transparent.ico')
 
         def DOT2Pic():
-            plik_DOT = filedialog.askopenfilename(filetypes=(("Text Documents", "*.txt"), ("DOT Files", "*.dot"), ("All files", "*.*")), title="Proszę wybierz plik z kodem DOT")
+            plik_DOT = filedialog.askopenfilename(filetypes=(("Text Documents", "*.txt"), ("DOT Files", "*.dot"), ("All files", "*.*")), title="Proszę wybierz plik z kodem DOT.")
             if plik_DOT:
                 try:
                     print("Plik został wczytany pomyślnie.")
@@ -30,16 +30,23 @@ class TkinterGUI(object):
                 tlo.configure(image=obrazek)
                 tlo.image = obrazek
 
+        def Prufer2Pic_konwersja(tresc_pliku):
+            a = tresc_pliku.split()
+            b = []
+            for i in range(len(a)+2):
+                b.append(i+1)
+
+            # return plik_DOT
+
         def Prufer2Pic():
-            plik_Prufer = filedialog.askopenfilename(filetypes=(("Text Documents", "*.txt"), ("All files", "*.*")), title="Proszę wybierz plik .txt z kodem Prüfera")
+            plik_Prufer = filedialog.askopenfilename(filetypes=(("Text Documents", "*.txt"), ("All files", "*.*")), title="Proszę wybierz plik .txt z kodem Prüfera.")
             if plik_Prufer:
                 try:
                     print("Plik został wczytany pomyślnie.")
                 except:
                     showerror("Open Source File", "Failed to read file\n'%s'" % plik_Prufer)
             tresc_pliku = open(plik_Prufer, 'w')
-            Prufer.checkifPrufer(tresc_pliku)
-            plik_DOT = Prufer.Prufer2DOT(tresc_pliku)
+            plik_DOT = Prufer2Pic_konwersja(tresc_pliku)
             obrazek = render('dot', 'png', plik_DOT)
             obrazek = ImageTk.PhotoImage(Image.open(obrazek))
             tlo.configure(image=obrazek)
@@ -53,6 +60,9 @@ class TkinterGUI(object):
         subMenu1.add_command(label="Picture->DOT", command=OdczytZapis.Pic2DOT)
         subMenu1.add_command(label="Prüfer->Picture", command=Prufer2Pic)
         subMenu1.add_command(label="Picture->Prüfer", command=OdczytZapis.Pic2Prufer)
+        # subMenu1.add_command(label="DOT->Prüfer", command=OdczytZapis.DOT2Prufer)
+        # subMenu1.add_command(label="Prüfer->DOT", command=OdczytZapis.Prufer2DOT)
+
 
         # subMenu1.add_command(label="DOT->Prüfer", command=OdczytZapis.DOT2Prufer)
         # subMenu1.add_command(label="Prüfer->DOT", command=OdczytZapis.Prufer2DOT)

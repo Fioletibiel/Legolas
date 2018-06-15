@@ -143,14 +143,35 @@ class OdczytZapis(object):
     def liscie_od_najmniejszego_do_najwiekszego():
         # wyciagniecie tablicy lisci:
         tablica_lisci = []
-        b = True
         for i in range(len(OdczytZapis.tablica_wybranych_randomowych_od)):
+            b = True
             for j in range(len(OdczytZapis.tablica_wybranych_randomowych_do)):
                 if OdczytZapis.tablica_wybranych_randomowych_od[i] == OdczytZapis.tablica_wybranych_randomowych_do[j]:
                     b = False
             if b == True:
                 tablica_lisci.append(OdczytZapis.tablica_wybranych_randomowych_od[i])
         # posortowanie tablicy lisci:
+        tablica_lisci.sort()
+        return tablica_lisci
+
+    bufor_tablica_wybranych_randomowych_od = tablica_wybranych_randomowych_od
+    bufor_tablica_wybranych_randomowych_do = tablica_wybranych_randomowych_do
+    usuwany_element = 'a'
+    def liscie_od_najmniejszego_do_najwiekszego_uaktualniana():
+        tablica_lisci = []
+        bufor = 0
+        for i in range(len(OdczytZapis.bufor_tablica_wybranych_randomowych_od)):
+            if OdczytZapis.bufor_tablica_wybranych_randomowych_od[i] == OdczytZapis.usuwany_element:
+                bufor = i
+        OdczytZapis.bufor_tablica_wybranych_randomowych_od.remove(OdczytZapis.bufor_tablica_wybranych_randomowych_od[bufor])
+        OdczytZapis.bufor_tablica_wybranych_randomowych_do.remove(OdczytZapis.bufor_tablica_wybranych_randomowych_do[bufor])
+        for i in range(len(OdczytZapis.bufor_tablica_wybranych_randomowych_od)):
+            b = True
+            for j in range(len(OdczytZapis.bufor_tablica_wybranych_randomowych_do)):
+                if OdczytZapis.bufor_tablica_wybranych_randomowych_od[i] == OdczytZapis.bufor_tablica_wybranych_randomowych_do[j]:
+                    b = False
+            if b == True:
+                tablica_lisci.append(OdczytZapis.bufor_tablica_wybranych_randomowych_od[i])
         tablica_lisci.sort()
         return tablica_lisci
 
@@ -174,17 +195,18 @@ class OdczytZapis(object):
             OdczytZapis.g.render(plik_DOT)
 
     def Pic2Prufer_konwersja():
-        tablica_lisci = OdczytZapis.liscie_od_najmniejszego_do_najwiekszego()
-        tablica_lisci_pomniejszona = tablica_lisci
         tabela_Prufera = []
-        for i in range(len(tablica_lisci)-2):
-            usuwany_element = tablica_lisci[i]
-            tablica_lisci_pomniejszona.remove(usuwany_element)     # usuwa najmniejszy lisc
-            dodawany_element = ten_z_ktorym_sie_laczy(usuwany_element)
-            tabela_Prufera.append(dodawany_element)     # tu musimy dodac wierzcholek, z ktorym sie usuniety najmniejszy lisc laczyl, co liczymy powyzej
-        trescpliku = ', '.join(str(e) for e in tabela_Prufera)
-        print(trescpliku)       # coś tu nie gra, bo treść jest pusta :/
-        print(tabela_Prufera)
+        tablica_lisci = OdczytZapis.liscie_od_najmniejszego_do_najwiekszego()
+        tablica_lisci_pomniejszana = tablica_lisci
+        i = 0
+        while i < len(OdczytZapis.tablica_nazw_wierzcholkow)-2:
+            OdczytZapis.usuwany_element = tablica_lisci_pomniejszana[0]
+            dodawany_element = OdczytZapis.ten_z_ktorym_sie_laczy(OdczytZapis.usuwany_element)
+            tabela_Prufera.append(dodawany_element)
+            tablica_lisci_pomniejszana.remove(OdczytZapis.usuwany_element)
+            tablica_lisci_pomniejszana = OdczytZapis.liscie_od_najmniejszego_do_najwiekszego_uaktualniana()
+            i += 1
+        trescpliku = ' '.join(str(e) for e in tabela_Prufera)
         return trescpliku
 
     def Pic2Prufer():
@@ -202,7 +224,34 @@ class OdczytZapis(object):
             plik.write(tresc_pliku)
             plik.close
 
-
+    # def DOT2PRufer_konwersja(graf):
+    #     pass
+    # def DOT2Prufer():
+    #     plik_DOT = filedialog.askopenfilename(
+    #         filetypes=(("Text Documents", "*.txt"), ("DOT Files", "*.dot"), ("All files", "*.*")),
+    #         title="Proszę wybierz plik z kodem DOT.")
+    #     if plik_DOT:
+    #         try:
+    #             print("Plik został wczytany pomyślnie.")
+    #         except:
+    #             showerror("Open Source File", "Failed to read file\n'%s'" % plik_DOT)
+    #         graf = render(plik_DOT)
+    #         tresc_pliku = OdczytZapis.DOT2Prufer_konwersja(graf)
+    #     plik_Prufer = filedialog.asksaveasfilename(
+    #         filetypes=(("Text Documents", "*.txt"), ("All files", "*.*")),
+    #         title='Proszę wybierz plik .txt, do którego chcesz zapisać kod Prüfera.',
+    #         defaultextension='.txt')
+    #     if plik_Prufer:
+    #         try:
+    #             print("Plik został pomyślnie zapisany.")
+    #         except:
+    #             showerror("Open Source File", "Failed to save file\n'%s'" % plik_Prufer)
+    #         plik = open(plik_Prufer, 'w')
+    #         plik.write(tresc_pliku)
+    #         plik.close
+    #
+    # def Prufer2DOT():
+    #     pass
 
     def Tekst2Wynik():
         # plik_DOT = filedialog.asksaveasfilename(filetypes=(("Text Documents", "*.txt"), ("DOT Files", "*.dot"), ("All files", "*.*")),title='Proszę wybierz plik .txt, do którego chcesz zapisać kod DOT namalowanego grafu.',defaultextension='.txt')
@@ -222,8 +271,7 @@ class OdczytZapis(object):
         pass
 
     # Zrobić:
-    # 1) Pic2Prufer_konwersja():
-    # 2) Prufer2Pic():
+    # 1) Prufer2Pic():
 
-    # 3) Tekst2Wynik
-    # 4) Pic2Wynik():
+    # 2) Tekst2Wynik
+    # 3) Pic2Wynik():
