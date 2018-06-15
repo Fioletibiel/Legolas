@@ -121,7 +121,7 @@ class TkinterGUI(object):
             tekst = tresc_pliku.split()
             n = tekst[0]
             m = tekst[1]
-            print("n: "+str(n)+" i m: "+str(m))
+            # print("n: "+str(n)+" i m: "+str(m))
             a = []
             b = []
             for i in range(len(tekst)):
@@ -135,6 +135,51 @@ class TkinterGUI(object):
             # print(a)
             # print("Tabela b:")
             # print(b)
+
+            kopia_a = a
+            kopia_b = b
+            def odejmowanie_dwoch_tablic(a,b):
+                c = []
+                for i in range(len(a)):
+                    bool = True
+                    for j in range(len(b)):
+                        if a[i] == b[j]:
+                            bool = False
+                    if bool == True:
+                        c.append(a[i])
+                return c
+            def aktualny_semestr(a,b,c,d):
+                prawidziwe_a = c
+                prawdziwe_b = d
+                kopia_a = a
+                kopia_b = b
+                tablica_semestru = []
+                tablica_sasiadow_semestru = []
+                for i in range(len(kopia_b)):
+                    bool = True
+                    for j in range(len(kopia_a)):
+                        if kopia_b[i] == kopia_a[j]:
+                            bool = False
+                    if bool == True:
+                        tablica_semestru.append(kopia_b[i])
+                        bufor = 0
+                        for k in range(len(prawdziwe_b)):
+                            if prawdziwe_b[k] == kopia_b[k]:
+                                bufor = k
+                        tablica_sasiadow_semestru.append(prawidziwe_a[k])
+                kopia_a = odejmowanie_dwoch_tablic(kopia_a,tablica_sasiadow_semestru)
+                kopia_b = odejmowanie_dwoch_tablic(kopia_b,tablica_semestru)
+                return tablica_semestru, kopia_a, kopia_b
+            licz = 1
+            bufor_tablica_semestru = []
+            while True:
+                tablica_semestru, kopia_a, kopia_b = aktualny_semestr(kopia_a, kopia_b, a, b)
+                if bufor_tablica_semestru != tablica_semestru:
+                    bufor_tablica_semestru = tablica_semestru
+                    print("Semestr "+str(licz)+": "+str(tablica_semestru))
+                    licz +=1
+                else:
+                    break
 
             # DOT = "graph {\n"
             # for i in range(len(a)):
@@ -152,14 +197,6 @@ class TkinterGUI(object):
             g = {}
             for i in range(len(a)):
                 g[b[i]]=a[i]
-            # print(g)
-
-
-            # Semestr 1: 1, 9, 11, 13, 15
-            # Semestr 2: 0, 8, 10
-            # Semestr 3: 3, 4, 5, 6
-            # Semestr 4: 2, 7, 12
-            # Semestr 5: 14
 
             def cyclic(g):
                 path = set()
@@ -176,7 +213,6 @@ class TkinterGUI(object):
                     return False
                 return any(visit(v) for v in g)
             cykliczny = cyclic(g)
-            print(cykliczny)
             if cykliczny == True:
                 wynik = "nie"
             elif cykliczny == False:
