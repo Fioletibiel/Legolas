@@ -116,6 +116,7 @@ class TkinterGUI(object):
             tlo.configure(image=img_update)
             tlo.image = img_update
 
+        # -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
         def Tekst2Wynik_konwersja(tresc_pliku):
             tekst = tresc_pliku.split()
@@ -242,6 +243,8 @@ class TkinterGUI(object):
 
         # Poprawić:
         # 1) Prufer2Pic():
+        # 2) Sprawdzić, czy Tekst2Wynik działa poprawnie na większych drzewach, ponieważ te przykładowe Michała coś u mnie nie działały...
+        # ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
         menu = Menu(self.root)
         self.root.config(menu=menu)
