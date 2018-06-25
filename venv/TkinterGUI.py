@@ -7,12 +7,14 @@ from graphviz import render
 from graphviz import *
 from PIL import ImageTk, Image
 import networkx as nx
+import numpy as np
 
 
 class TkinterGUI(object):
 
     tablica_dodanych_a = []
     tablica_dodanych_m = []
+    tablica_dodanych_wierzcholkow = []
 
     def __init__(self):
         self.root = Tk()
@@ -32,12 +34,82 @@ class TkinterGUI(object):
                 tlo.configure(image=obrazek)
                 tlo.image = obrazek
 
+        # ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-        def znajdz_najmniejsza_nierowna(ciag, x):
-            m = min(j for j in ciag if j != x)
-            return m
-        def Prufer2Pic_konwersja(tresc_pliku):
-            a3 = tresc_pliku.split()
+        def znajdz_najmniejsza_nierowna_ciagowi(ciag_b, ciag_a, x):
+            main_list = np.setdiff1d(ciag_b, ciag_a)
+            minimum = min(j for j in main_list if j != x)
+            return minimum
+        # def Prufer2Pic_konwersja(tresc_pliku):
+        #     a3 = tresc_pliku.split()
+        #     alfabet = []
+        #     czar = 'a'
+        #     for i in range(24):
+        #         alfabet.append(czar)
+        #         aski = ord(czar)
+        #         aski += 1
+        #         czar = chr(aski)
+        #     a_int = []
+        #     a_chr = []
+        #     a = [] * len(a3)
+        #     no_i = "int czy string?"
+        #     try:
+        #         for i in range(len(a3)):
+        #             bufor_a_3 = int(a3[i])
+        #             a_int.append(bufor_a_3)
+        #         no_i = "int"
+        #         a2 = a_int
+        #     except ValueError:
+        #         print("Oops!")
+        #     try:
+        #         if no_i != "int":
+        #             for i in range(len(a3)):
+        #                 print("Typ: "+str(a3[i])+" to "+str(type(a3[i])))
+        #                 bufor_a_trzy = chr(a3[i])
+        #                 a_chr.append(bufor_a_trzy)
+        #             a2 = a_chr
+        #     except ValueError:
+        #         print("Oops!")
+        #     if type(a2[0]) == chr and a2[0] != None:
+        #         for i in range(len(a2)):
+        #             for j in range(alfabet):
+        #                 if a2[i] == alfabet[j]:
+        #                     bufor = j
+        #             a[i] = j+1
+        #     else:
+        #         a = a2
+        #     # a = []
+        #     # for i in range(len(a3)):
+        #     #     print(a3[i])
+        #     #     a.append(int(a3[i]))
+        #
+        #     b = []
+        #     for i in range(len(a)+2):
+        #         b.append(i+1)
+        #     # teraz zaczyna sie dopasowywanie:
+        #     OdczytZapis.g = Graph(format='png')
+        #     dlugosc_ciagu = len(a)
+        #     for i in range(dlugosc_ciagu):
+        #         m = znajdz_najmniejsza_nierowna(b, a[i])
+        #         for j in range(len(TkinterGUI.tablica_dodanych_a)):
+        #             if TkinterGUI.tablica_dodanych_a[j] != a[i]:
+        #                 OdczytZapis.g.node(a[i])
+        #                 TkinterGUI.tablica_dodanych_a.append(a[i])
+        #         for j in range(len(TkinterGUI.tablica_dodanych_m)):
+        #             if TkinterGUI.tablica_dodanych_m[j] != m:
+        #                 OdczytZapis.g.node(m)
+        #                 TkinterGUI.tablica_dodanych_m.append(m)
+        #         OdczytZapis.g.edge(str(a[i]),str(m))
+        #         a.remove(a[i])
+        #         b.remove(m)
+        #     OdczytZapis.g.node(b[-1])
+        #     OdczytZapis.g.node(b[-2])
+        #     OdczytZapisg.edge(b[-1],b[-2])
+        # def czy_jest_z_liczb(inputString):
+        #     return all(element.isdigit() for element in inputString)
+        # def czy_jest_z_charow(inputString):
+        #     return all(element.isalpha() for element in inputString)
+        def tworz_alfabet():
             alfabet = []
             czar = 'a'
             for i in range(24):
@@ -45,62 +117,84 @@ class TkinterGUI(object):
                 aski = ord(czar)
                 aski += 1
                 czar = chr(aski)
-            a_int = []
-            a_chr = []
-            a = [] * len(a3)
+            return alfabet
+        def Prufer2Pic_konwersja(tresc_pliku):
+            a2 = tresc_pliku.split()
+            a = [] * len(a2)
+            alfabet = tworz_alfabet()
             no_i = "int czy string?"
+            a_int = []
             try:
-                for i in range(len(a3)):
-                    bufor_a_3 = int(a3[i])
-                    a_int.append(bufor_a_3)
-                no_i = "int"
-                a2 = a_int
-            except ValueError:
-                print("Oops!")
-            try:
-                if no_i != "int":
-                    for i in range(len(a3)):
-                        print("Typ: "+str(a3[i])+" to "+str(type(a3[i])))
-                        bufor_a_trzy = chr(a3[i])
-                        a_chr.append(bufor_a_trzy)
-                    a2 = a_chr
-            except ValueError:
-                print("Oops!")
-            if type(a2[0]) == chr and a2[0] != None:
                 for i in range(len(a2)):
-                    for j in range(alfabet):
+                    bufor_a_2 = int(a2[i])
+                    a_int.append(bufor_a_2)
+                no_i = "int"
+                a = a_int
+            except ValueError:
+                print("Zamiana znaków etykiet na liczby...")
+                no_i = "string"
+            if no_i != "int":
+                a = a2
+            # if czy_jest_z_liczb(tresc_pliku)==True:
+            #     no_i = "int"
+            # if czy_jest_z_charow(tresc_pliku)==True:
+            #     no_i = "char"
+            print("No i "+str(no_i))
+            # poniżej zamiana stringów na inty, w przypadku, gdy wczytana tablica jest ze stringów
+            if isinstance(a2[0], str) and a2[0] != None:
+                for i in range(len(a2)):
+                    for j in range(len(alfabet)):
                         if a2[i] == alfabet[j]:
                             bufor = j
                     a[i] = j+1
-            else:
-                a = a2
-            # a = []
-            # for i in range(len(a3)):
-            #     print(a3[i])
-            #     a.append(int(a3[i]))
-
+            # poniżej robi się listę b kolejnych liczb o dwie więcej, niż w liście a
             b = []
             for i in range(len(a)+2):
                 b.append(i+1)
             # teraz zaczyna sie dopasowywanie:
             OdczytZapis.g = Graph(format='png')
-            dlugosc_ciagu = len(a)
-            for i in range(dlugosc_ciagu):
-                m = znajdz_najmniejsza_nierowna(b, a[i])
-                for j in range(len(TkinterGUI.tablica_dodanych_a)):
-                    if TkinterGUI.tablica_dodanych_a[j] != a[i]:
-                        OdczytZapis.g.node(a[i])
-                        TkinterGUI.tablica_dodanych_a.append(a[i])
-                for j in range(len(TkinterGUI.tablica_dodanych_m)):
-                    if TkinterGUI.tablica_dodanych_m[j] != m:
-                        OdczytZapis.g.node(m)
-                        TkinterGUI.tablica_dodanych_m.append(m)
-                OdczytZapis.g.edge(str(a[i]),str(m))
-                a.remove(a[i])
-                b.remove(m)
-            OdczytZapis.g.node(b[-1])
-            OdczytZapis.g.node(b[-2])
-            OdczytZapisg.edge(b[-1],b[-2])
+            # dlugosc_ciagu = len(a)
+            # for i in range(dlugosc_ciagu):
+            #     m = znajdz_najmniejsza_nierowna(b, a[i])
+            #     for j in range(len(TkinterGUI.tablica_dodanych_a)):
+            #         if TkinterGUI.tablica_dodanych_a[j] != a[i]:
+            #             OdczytZapis.g.node(a[i])
+            #             TkinterGUI.tablica_dodanych_a.append(a[i])
+            #     for j in range(len(TkinterGUI.tablica_dodanych_m)):
+            #         if TkinterGUI.tablica_dodanych_m[j] != m:
+            #             OdczytZapis.g.node(m)
+            #             TkinterGUI.tablica_dodanych_m.append(m)
+            #     OdczytZapis.g.edge(str(a[i]),str(m))
+            #     a.remove(a[i])
+            #     b.remove(m)
+            m = [] * len(a)
+            for i in range(len(a)):
+                m.append(znajdz_najmniejsza_nierowna_ciagowi(b, a, a[0]))
+                for j in range(len(TkinterGUI.tablica_dodanych_wierzcholkow)):
+                    if len(TkinterGUI.tablica_dodanych_wierzcholkow)==0:
+                        OdczytZapis.g.node(str(a[0]))
+                        TkinterGUI.tablica_dodanych_wierzcholkow.append(a[0])
+                    else:
+                        if TkinterGUI.tablica_dodanych_wierzcholkow[j] != a[0]:
+                            OdczytZapis.g.node(str(a[0]))
+                            TkinterGUI.tablica_dodanych_wierzcholkow.append(a[0])
+                for j in range(len(TkinterGUI.tablica_dodanych_wierzcholkow)):
+                    if TkinterGUI.tablica_dodanych_wierzcholkow[j] != m:
+                        OdczytZapis.g.node(str(m))
+                        TkinterGUI.tablica_dodanych_wierzcholkow.append(m)
+                OdczytZapis.g.edge(str(a[0]),str(m[i]))
+                a.remove(a[0])
+                b.remove(m[i])
+            # teraz dodajemy krawędź z dwóch ostatnich elementów ciągu Prüfera
+            for j in range(len(TkinterGUI.tablica_dodanych_wierzcholkow)):
+                if TkinterGUI.tablica_dodanych_wierzcholkow[j] != b[0]:
+                    OdczytZapis.g.node(str(b[0]))
+                    TkinterGUI.tablica_dodanych_wierzcholkow.append(b[0])
+                if TkinterGUI.tablica_dodanych_wierzcholkow[j] != b[1]:
+                    OdczytZapis.g.node(str(b[1]))
+                    TkinterGUI.tablica_dodanych_wierzcholkow.append(b[1])
+            OdczytZapis.g.edge(str(b[0]),str(b[1]))
+
         def Prufer2Pic():
             plik_Prufer = filedialog.askopenfilename(filetypes=(("Text Documents", "*.txt"), ("All files", "*.*")), title="Proszę wybierz plik .txt z kodem Prüfera.")
             if plik_Prufer:
@@ -111,12 +205,15 @@ class TkinterGUI(object):
             with open(plik_Prufer, 'r') as myfile:
                 tresc_pliku = myfile.read()
             Prufer2Pic_konwersja(tresc_pliku)
-            img_update = render('dot', 'png', OdczytZapis.g)
+            img_update = render('dot', 'png', OdczytZapis.g)    # tutaj skończyłem narazie ^^
             img_update = ImageTk.PhotoImage(Image.open(img_update))
             tlo.configure(image=img_update)
             tlo.image = img_update
 
-        # -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        # Do zrobienia:
+        # 1) Poprawić Prüfer2Pic():
+        # 2) Poprawić Pic2Prüfer():
+        # ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
         def Tekst2Wynik_konwersja(tresc_pliku):
             tekst = tresc_pliku.split()
@@ -219,6 +316,7 @@ class TkinterGUI(object):
             elif cykliczny == False:
                 wynik = "tak"
             return wynik
+
         def Tekst2Wynik():
             plik_kursy = filedialog.askopenfilename(filetypes=(("Text Documents", "*.txt"), ("DOT Files", "*.dot"), ("All files", "*.*")), title="Proszę wybierz plik z listą kursów.")
             if plik_kursy:
@@ -240,10 +338,8 @@ class TkinterGUI(object):
             else:
                 print("Coś poszło nie tak :/")
 
-
-        # Poprawić:
-        # 1) Prufer2Pic():
-        # 2) Sprawdzić, czy Tekst2Wynik działa poprawnie na większych drzewach, ponieważ te przykładowe Michała coś u mnie nie działały...
+        # Do zrobienia:
+        # 3) Sprawdzić, czy Tekst2Wynik działa poprawnie na większych drzewach, ponieważ te przykładowe Michała coś u mnie nie działały...
         # ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
         menu = Menu(self.root)
