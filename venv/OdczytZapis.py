@@ -111,9 +111,9 @@ class OdczytZapis(object):
         if plik_DOT:
             try:
                 print("Plik został zapisany pomyślnie.")
+                OdczytZapis.g.render(plik_DOT)
             except:
                 showerror("Open Source File", "Failed to read file\n'%s'" % plik_DOT)
-            OdczytZapis.g.render(plik_DOT)
 
     def Pic2Prufer_konwersja():
         tabela_Prufera = []
@@ -139,11 +139,11 @@ class OdczytZapis(object):
         if plik_Prufer:
             try:
                 print("Plik został pomyślnie zapisany.")
+                plik = open(plik_Prufer, 'w')
+                plik.write(tresc_pliku)
+                plik.close
             except:
                 showerror("Open Source File", "Failed to save file\n'%s'" % plik_Prufer)
-            plik = open(plik_Prufer, 'w')
-            plik.write(tresc_pliku)
-            plik.close
 
     # def DOT2PRufer_konwersja(graf):
     #     pass
