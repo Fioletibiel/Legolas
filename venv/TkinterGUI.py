@@ -221,9 +221,6 @@ class TkinterGUI(object):
             img_update = ImageTk.PhotoImage(Image.open(img_update))
             tlo.configure(image=img_update)
             tlo.image = img_update
-
-        # ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
         def Prufer2DOT():
             plik_Prufer = filedialog.askopenfilename(filetypes=(("Text Documents", "*.txt"), ("All files", "*.*")),
                                                      title="Proszę wybierz plik .txt z kodem Prüfera.")
@@ -244,6 +241,138 @@ class TkinterGUI(object):
                     OdczytZapis.g.render(plik_DOT)
                 except:
                     showerror("Open Source File", "Failed to read file\n'%s'" % plik_DOT)
+
+        # ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+        def DOT2Prufer_konwersja(plik_DOT):
+            return plik_Prufer
+        def DOT2Prufer():
+            plik_DOT = filedialog.askopenfilename(
+                filetypes=(("Text Documents", "*.txt"), ("DOT Files", "*.dot"), ("All files", "*.*")),
+                title="Proszę wybierz plik z kodem DOT.")
+            if plik_DOT:
+                try:
+                    print("Plik został wczytany pomyślnie.")
+                except:
+                    showerror("Open Source File", "Failed to read file\n'%s'" % plik_DOT)
+            tresc_pliku = DOT2Prufer_konwersja(plik_DOT)
+            plik_Prufer = filedialog.asksaveasfilename(
+                filetypes=(("Text Documents", "*.txt"), ("All files", "*.*")),
+                title='Proszę wybierz plik .txt, do którego chcesz zapisać kod Prüfera.',
+                defaultextension='.txt')
+            if plik_Prufer:
+                try:
+                    print("Plik został pomyślnie zapisany.")
+                    plik = open(plik_Prufer, 'w')
+                    plik.write(tresc_pliku)
+                    plik.close
+                except:
+                    showerror("Open Source File", "Failed to save file\n'%s'" % plik_Prufer)
+
+        # Opcjonalnie do zrobienia DOT2Prufer_konwersja():
+        # ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+        bufor_od = OdczytZapis.tablica_wybranych_randomowych_od.copy()
+        bufor_do = OdczytZapis.tablica_wybranych_randomowych_do.copy()
+        usuwany_element = 'a'
+        def liscie_od_najmniejszego_do_najwiekszego(od, do):
+            # wyciagniecie tablicy lisci:
+            tablica_lisci = []
+            for i in range(len(od)):
+                b = True
+                for j in range(len(do)):
+                    if od[i] == do[j]:
+                        b = False
+                if b == True:
+                    tablica_lisci.append(od[i])
+            for i in range(len(do)):
+                b = True
+                for j in range(len(od)):
+                    if do[i] == od[j]:
+                        b = False
+                if b == True:
+                    tablica_lisci.append(do[i])
+            # powyżej wytypowałem te wierzchołki, do których wchodzą krawędzie, ale nie wychodzą, oraz te, z których wychodzą krawędzie, ale żadne nie wchodzą - czyli które są tylko w zbiorze 'od', albo tylko w zbiorze 'do'...
+            # jednak to nie wystarczy, ponieważ może tak się zdarzyć, że wierzchołek nie będący wcale liściem ma np. dwie krawędzie wchodzące, lub wychodzące i takie trzeba usunąć z tablicy_liści...
+            # tak więc trzeba znaleźć teraz wierzchołki, które są kilka razy w zbiorze 'od' lub w zbiorze 'do' (lub wcześniej liczyć ile razy dany wierzchołek był w od oraz w do i jeśli więcej niż raz, to jest on zapamiętywany i potem usuwany):
+            for i in range(len(od)):
+                k = 0
+                for j in range(len(od)):
+                    if od[i] == od[j]:
+                        k += 1
+                if k > 1:
+                    tablica_lisci.remove(od[i])
+            for i in range(len(do)):
+                k = 0
+                for j in range(len(do)):
+                    if do[i] == do[j]:
+                        k += 1
+                if k > 1:
+                    tablica_lisci.remove(do[i])
+            # posortowanie tablicy lisci:
+            tablica_lisci.sort()
+            return tablica_lisci
+        def liscie_od_najmniejszego_do_najwiekszego_uaktualniana(od, do):
+            buf1, buf2 = 0
+            for i in range(len(od)):
+                if od[i] == usuwany_element:
+                    bufor = i
+            for i in range(len(do)):
+                if do[i] == usuwany_element:
+                    bufor = i
+            od.remove(od[bufor])
+            do.remove(do[bufor])
+            tablica_lisci = liscie_od_najmniejszego_do_najwiekszego(od, do)
+            return tablica_lisci
+
+        def ten_z_ktorym_sie_laczy(usuwany_element):
+            bufor = 0
+            for i in range(len(OdczytZapis.tablica_wybranych_randomowych_od)):
+                if usuwany_element == OdczytZapis.tablica_wybranych_randomowych_od[i]:
+                    bufor = i
+            for i in range(len(OdczytZapis.tablica_wybranych_randomowych_do)):
+                if usuwany_element == OdczytZapis.tablica_wybranych_randomowych_do[i]:
+                    bufor = i
+            dodawany_element = OdczytZapis.tablica_wybranych_randomowych_do[bufor]
+            # ta funkcja do poprawy!!!
+            return dodawany_element
+
+        def jesli_obecny_to_usun(lista, element):
+            buf_lista = lista.copy()
+            for i in range(len(lista)):
+                if lista[i]==element:
+                    buf_lista.pop(i)
+            return buf_lista
+        def Pic2Prufer_konwersja():
+            tabela_Prufera = []
+            tablica_lisci = liscie_od_najmniejszego_do_najwiekszego(OdczytZapis.bufor_tablica_wybranych_randomowych_od, OdczytZapis.tablica_wybranych_randomowych_do)
+            tablica_lisci_pomniejszana = tablica_lisci.copy()
+            i = 0
+            while i < len(OdczytZapis.tablica_nazw_wierzcholkow) - 2:
+                usuwany_element = tablica_lisci_pomniejszana[0]
+                dodawany_element = ten_z_ktorym_sie_laczy(usuwany_element)
+                tabela_Prufera.append(dodawany_element)
+                # bufor_od = jesli_obecny_to_usun(bufor_od, usuwany_element)
+                # bufor_do = jesli_obecny_to_usun(bufor_do, usuwany_element)
+                # tablica_lisci_pomniejszana = liscie_od_najmniejszego_do_najwiekszego(bufor_od, bufor_do)
+                tablica_lisci_pomniejszana = liscie_od_najmniejszego_do_najwiekszego_uaktualniana(bufor_od,bufor_do)
+                i += 1
+            trescpliku = ' '.join(str(e) for e in tabela_Prufera)
+            return trescpliku
+        def Pic2Prufer():
+            tresc_pliku = Pic2Prufer_konwersja()
+            plik_Prufer = filedialog.asksaveasfilename(
+                filetypes=(("Text Documents", "*.txt"), ("All files", "*.*")),
+                title='Proszę wybierz plik .txt, do którego chcesz zapisać kod Prüfera.',
+                defaultextension='.txt')
+            if plik_Prufer:
+                try:
+                    print("Plik został pomyślnie zapisany.")
+                    plik = open(plik_Prufer, 'w')
+                    plik.write(tresc_pliku)
+                    plik.close
+                except:
+                    showerror("Open Source File", "Failed to save file\n'%s'" % plik_Prufer)
 
         # ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -381,9 +510,10 @@ class TkinterGUI(object):
         subMenu1.add_command(label="DOT->Picture", command=DOT2Pic)
         subMenu1.add_command(label="Picture->DOT", command=OdczytZapis.Pic2DOT)
         subMenu1.add_command(label="Prüfer->Picture", command=Prufer2Pic)
-        subMenu1.add_command(label="Picture->Prüfer", command=OdczytZapis.Pic2Prufer)
-        # subMenu1.add_command(label="DOT->Prüfer", command=OdczytZapis.DOT2Prufer)
+        subMenu1.add_command(label="Picture->Prüfer", command=Pic2Prufer)
         subMenu1.add_command(label="Prüfer->DOT", command=Prufer2DOT)
+        # subMenu1.add_command(label="DOT->Prüfer", command=DOT2Prufer)
+
 
         subMenu2 = Menu(menu)
         menu.add_cascade(label="Kursy", menu=subMenu2)
