@@ -170,6 +170,3 @@ class OdczytZapis(object):
     #         plik = open(plik_Prufer, 'w')
     #         plik.write(tresc_pliku)
     #         plik.close
-    #
-    # def Prufer2DOT():
-    #     pass

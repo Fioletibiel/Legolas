@@ -224,6 +224,29 @@ class TkinterGUI(object):
 
         # ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+        def Prufer2DOT():
+            plik_Prufer = filedialog.askopenfilename(filetypes=(("Text Documents", "*.txt"), ("All files", "*.*")),
+                                                     title="Proszę wybierz plik .txt z kodem Prüfera.")
+            if plik_Prufer:
+                try:
+                    print("Plik został wczytany pomyślnie.")
+                except:
+                    showerror("Open Source File", "Failed to read file\n'%s'" % plik_Prufer)
+            with open(plik_Prufer, 'r') as myfile:
+                tresc_pliku = myfile.read()
+            Prufer2Pic_konwersja(tresc_pliku)
+            plik_DOT = filedialog.asksaveasfilename(
+                filetypes=(("Text Documents", "*.txt"), ("DOT Files", "*.dot"), ("All files", "*.*")),
+                title="Proszę wybierz plik, do którego chcesz zapisać kod DOT.")
+            if plik_DOT:
+                try:
+                    print("Plik został zapisany pomyślnie.")
+                    OdczytZapis.g.render(plik_DOT)
+                except:
+                    showerror("Open Source File", "Failed to read file\n'%s'" % plik_DOT)
+
+        # ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
         def Tekst2Wynik_konwersja(tresc_pliku):
             tekst = tresc_pliku.split()
             n = tekst[0]
@@ -360,7 +383,7 @@ class TkinterGUI(object):
         subMenu1.add_command(label="Prüfer->Picture", command=Prufer2Pic)
         subMenu1.add_command(label="Picture->Prüfer", command=OdczytZapis.Pic2Prufer)
         # subMenu1.add_command(label="DOT->Prüfer", command=OdczytZapis.DOT2Prufer)
-        # subMenu1.add_command(label="Prüfer->DOT", command=OdczytZapis.Prufer2DOT)
+        subMenu1.add_command(label="Prüfer->DOT", command=Prufer2DOT)
 
         subMenu2 = Menu(menu)
         menu.add_cascade(label="Kursy", menu=subMenu2)
