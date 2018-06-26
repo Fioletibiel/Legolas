@@ -62,17 +62,15 @@ class TkinterGUI(object):
                     a_int.append(bufor_a_2)
                 no_i = "inty"
                 a = a_int
-                ar=a
             except ValueError:
                 # print("Zamiana znaków etykiet na liczby...")
                 no_i = "stringi"
-                ar=a2
-            # if no_i != "int":
-            #     a = a2
-            # if czy_jest_z_liczb(tresc_pliku)==True:
-            #     no_i = "int"
-            # if czy_jest_z_charow(tresc_pliku)==True:
-            #     no_i = "char"
+            if no_i=="inty":
+                ar = a.copy()
+            elif no_i=="stringi":
+                ar = a2.copy()
+            else:
+                print("Coś poszło nie tak - Wczytany plik nie składa się ani z integerów, ani ze stringów.")
             print("Wczytany plik zawiera "+str(no_i)+".")
             print("a wynosi: "+str(a))
             # poniżej zamiana stringów na inty, w przypadku, gdy wczytana tablica jest ze stringów
@@ -89,34 +87,122 @@ class TkinterGUI(object):
             # teraz zaczyna sie dopasowywanie:
             OdczytZapis.g = Graph(format='png')
             m = [] * len(a)
+            # for i in range(len(a)):
+            #     m.append(znajdz_najmniejsza_nierowna_ciagowi(b, a, a[0]))
+            #     for j in range(len(TkinterGUI.tablica_dodanych_wierzcholkow)):
+            #         if len(TkinterGUI.tablica_dodanych_wierzcholkow)==0:
+            #             OdczytZapis.g.node(str(a[0]))
+            #             TkinterGUI.tablica_dodanych_wierzcholkow.append(a[0])
+            #         elif TkinterGUI.tablica_dodanych_wierzcholkow[j] != a[0]:
+            #             OdczytZapis.g.node(str(a[0]))
+            #             TkinterGUI.tablica_dodanych_wierzcholkow.append(a[0])
+            #     for j in range(len(TkinterGUI.tablica_dodanych_wierzcholkow)):
+            #         if TkinterGUI.tablica_dodanych_wierzcholkow[j] != m[i]:
+            #             OdczytZapis.g.node(str(m[i]))
+            #             TkinterGUI.tablica_dodanych_wierzcholkow.append(m)
+            #     OdczytZapis.g.edge(str(a[0]),str(m[i]))
+            #     print("a"+str(i)+": "+str(a))
+            #     print("b" + str(i) + ": " + str(b))
+            #     a.remove(a[0])
+            #     b.remove(m[i])
+            # # teraz dodajemy krawędź z dwóch ostatnich elementów ciągu Prüfera
+            # for j in range(len(TkinterGUI.tablica_dodanych_wierzcholkow)):
+            #     if TkinterGUI.tablica_dodanych_wierzcholkow[j] != b[0]:
+            #         OdczytZapis.g.node(str(b[0]))
+            #         TkinterGUI.tablica_dodanych_wierzcholkow.append(b[0])
+            #     if TkinterGUI.tablica_dodanych_wierzcholkow[j] != b[1]:
+            #         OdczytZapis.g.node(str(b[1]))
+            #         TkinterGUI.tablica_dodanych_wierzcholkow.append(b[1])
+            # OdczytZapis.g.edge(str(b[0]),str(b[1]))
+            # print("a final: " + str(a))
+            # print("b final: " + str(b))
             for i in range(len(a)):
                 m.append(znajdz_najmniejsza_nierowna_ciagowi(b, a, a[0]))
                 for j in range(len(TkinterGUI.tablica_dodanych_wierzcholkow)):
                     if len(TkinterGUI.tablica_dodanych_wierzcholkow)==0:
-                        OdczytZapis.g.node(str(a[0]))
-                        TkinterGUI.tablica_dodanych_wierzcholkow.append(a[0])
-                    else:
-                        if TkinterGUI.tablica_dodanych_wierzcholkow[j] != a[0]:
+                        if isinstance(ar[0],int):
                             OdczytZapis.g.node(str(a[0]))
                             TkinterGUI.tablica_dodanych_wierzcholkow.append(a[0])
+                        elif isinstance(ar[0], str):
+                            for k in range(len(alfabet)):
+                                if a[0] == (k+1):
+                                    bufor = k
+                            OdczytZapis.g.node(alfabet[bufor])
+                            TkinterGUI.tablica_dodanych_wierzcholkow.append(a[0])
+                    elif TkinterGUI.tablica_dodanych_wierzcholkow[j] != a[0]:
+                        if isinstance(ar[0],int):
+                            OdczytZapis.g.node(str(a[0]))
+                            TkinterGUI.tablica_dodanych_wierzcholkow.append(a[0])
+                        elif isinstance(ar[0], str):
+                            for k in range(len(alfabet)):
+                                if a[0] == (k+1):
+                                    bufor = k
+                            OdczytZapis.g.node(alfabet[bufor])
+                            TkinterGUI.tablica_dodanych_wierzcholkow.append(a[0])
                 for j in range(len(TkinterGUI.tablica_dodanych_wierzcholkow)):
-                    if TkinterGUI.tablica_dodanych_wierzcholkow[j] != m:
-                        OdczytZapis.g.node(str(m))
-                        TkinterGUI.tablica_dodanych_wierzcholkow.append(m)
-                OdczytZapis.g.edge(str(a[0]),str(m[i]))
-                print("a"+str(i)+": "+str(a))
+                    if TkinterGUI.tablica_dodanych_wierzcholkow[j] != m[i]:
+                        if isinstance(ar[0],int):
+                            OdczytZapis.g.node(str(m[i]))
+                            TkinterGUI.tablica_dodanych_wierzcholkow.append(m[i])
+                        elif isinstance(ar[0], str):
+                            for k in range(len(alfabet)):
+                                if m[i] == (k+1):
+                                    bufor = k
+                            OdczytZapis.g.node(alfabet[bufor])
+                            TkinterGUI.tablica_dodanych_wierzcholkow.append(m[i])
+                print("FLAGA")
+                if isinstance(ar[0], int):
+                    OdczytZapis.g.edge(str(a[0]), str(m[i]))
+                elif isinstance(ar[0], str):
+                    for k in range(len(alfabet)):
+                        if a[0] == (k + 1):
+                            bufor_a = k
+                    for k in range(len(alfabet)):
+                        if m[i] == (k + 1):
+                            bufor_m = k
+                    OdczytZapis.g.edge(alfabet[bufor_a],alfabet[bufor_m])
+                print("a"+ str(i) +": "+ str(a))
                 print("b" + str(i) + ": " + str(b))
-                a.remove(a[0])
+                # a.remove(a[0])
+                a.pop(0)
                 b.remove(m[i])
             # teraz dodajemy krawędź z dwóch ostatnich elementów ciągu Prüfera
             for j in range(len(TkinterGUI.tablica_dodanych_wierzcholkow)):
                 if TkinterGUI.tablica_dodanych_wierzcholkow[j] != b[0]:
-                    OdczytZapis.g.node(str(b[0]))
-                    TkinterGUI.tablica_dodanych_wierzcholkow.append(b[0])
+                    if isinstance(ar[0], int):
+                        OdczytZapis.g.node(str(b[0]))
+                        TkinterGUI.tablica_dodanych_wierzcholkow.append(b[0])
+                    elif isinstance(ar[0], str):
+                        for k in range(len(alfabet)):
+                            if b[0] == (k + 1):
+                                bufor = k
+                        OdczytZapis.g.node(alfabet[bufor])
+                        TkinterGUI.tablica_dodanych_wierzcholkow.append(b[0])
+                    # OdczytZapis.g.node(str(b[0]))
+                    # TkinterGUI.tablica_dodanych_wierzcholkow.append(b[0])
                 if TkinterGUI.tablica_dodanych_wierzcholkow[j] != b[1]:
-                    OdczytZapis.g.node(str(b[1]))
-                    TkinterGUI.tablica_dodanych_wierzcholkow.append(b[1])
-            OdczytZapis.g.edge(str(b[0]),str(b[1]))
+                    if isinstance(ar[0], int):
+                        OdczytZapis.g.node(str(b[1]))
+                        TkinterGUI.tablica_dodanych_wierzcholkow.append(b[1])
+                    elif isinstance(ar[0], str):
+                        for k in range(len(alfabet)):
+                            if b[1] == (k + 1):
+                                bufor = k
+                        OdczytZapis.g.node(alfabet[bufor])
+                        TkinterGUI.tablica_dodanych_wierzcholkow.append(b[1])
+                    # OdczytZapis.g.node(str(b[1]))
+                    # TkinterGUI.tablica_dodanych_wierzcholkow.append(b[1])
+            if isinstance(ar[0], int):
+                print("ar 2: " + str(ar))
+                OdczytZapis.g.edge(str(b[0]), str(b[1]))
+            elif isinstance(ar[0], str):
+                for k in range(len(alfabet)):
+                    if b[0] == (k + 1):
+                        bufor_b0 = k
+                for k in range(len(alfabet)):
+                    if b[1] == (k + 1):
+                        bufor_b1 = k
+                OdczytZapis.g.edge(alfabet[bufor_b0], alfabet[bufor_b1])
             print("a final: " + str(a))
             print("b final: " + str(b))
         def Prufer2Pic():
