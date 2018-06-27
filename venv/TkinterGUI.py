@@ -293,7 +293,7 @@ class TkinterGUI(object):
                 if b == True:
                     tablica_lisci.append(do[i])
             # powyżej wytypowałem te wierzchołki, do których wchodzą krawędzie, ale nie wychodzą, oraz te, z których wychodzą krawędzie, ale żadne nie wchodzą - czyli które są tylko w zbiorze 'od', albo tylko w zbiorze 'do'...
-            # jednak to nie wystarczy, ponieważ może tak się zdarzyć, że wierzchołek nie będący wcale liściem ma np. dwie krawędzie wchodzące, lub wychodzące i takie trzeba usunąć z tablicy_liści...
+            # jednak to nie wystarczy, ponieważ może tak się zdarzyć, że wierzchołek nie będący wcale liściem ma np. dwie krawędzie tylko wchodzące, lub tylko wychodzące i takie wierzchołki trzeba usunąć z tablicy_liści...
             # tak więc trzeba znaleźć teraz wierzchołki, które są kilka razy w zbiorze 'od' lub w zbiorze 'do' (lub wcześniej liczyć ile razy dany wierzchołek był w od oraz w do i jeśli więcej niż raz, to jest on zapamiętywany i potem usuwany):
             for i in range(len(od)):
                 k = 0
@@ -313,30 +313,25 @@ class TkinterGUI(object):
             tablica_lisci.sort()
             return tablica_lisci
         def liscie_od_najmniejszego_do_najwiekszego_uaktualniana(od, do):
-            buf1, buf2 = 0
+            for i in range(len(od)):
+                if od[i] == usuwany_element:    # jeśli którykolwiek wierzchołek 'od' jest równy usuwanemu wierzchołkowi, to usuwa się go ze zbioru wierzchołków 'od' oraz odpowiadającego mu wierzchołka ze zbioru wierzchołków 'do'...
+                    od.remove(od[i])
+                    do.remove(do[i])
+            for i in range(len(do)):
+                if do[i] == usuwany_element:    # to samo, co wyżej, tylko tym razem poczynając od zbioru wierzchołków 'do'...
+                    od.remove(od[i])
+                    do.remove(do[i])
+            tablica_lisci = liscie_od_najmniejszego_do_najwiekszego(od, do)    # uaktualnia tablicę liści z pomniejszonych zbiorów wierzchołków 'od' i 'do'.
+            return tablica_lisci
+        def ten_z_ktorym_sie_laczy(usuwany_element, od, do):
             for i in range(len(od)):
                 if od[i] == usuwany_element:
-                    bufor = i
+                    dodawany_element = do[i]
+
             for i in range(len(do)):
                 if do[i] == usuwany_element:
-                    bufor = i
-            od.remove(od[bufor])
-            do.remove(do[bufor])
-            tablica_lisci = liscie_od_najmniejszego_do_najwiekszego(od, do)
-            return tablica_lisci
-
-        def ten_z_ktorym_sie_laczy(usuwany_element):
-            bufor = 0
-            for i in range(len(OdczytZapis.tablica_wybranych_randomowych_od)):
-                if usuwany_element == OdczytZapis.tablica_wybranych_randomowych_od[i]:
-                    bufor = i
-            for i in range(len(OdczytZapis.tablica_wybranych_randomowych_do)):
-                if usuwany_element == OdczytZapis.tablica_wybranych_randomowych_do[i]:
-                    bufor = i
-            dodawany_element = OdczytZapis.tablica_wybranych_randomowych_do[bufor]
-            # ta funkcja do poprawy!!!
+                    dodawany_element = od[i]
             return dodawany_element
-
         def jesli_obecny_to_usun(lista, element):
             buf_lista = lista.copy()
             for i in range(len(lista)):
@@ -345,12 +340,12 @@ class TkinterGUI(object):
             return buf_lista
         def Pic2Prufer_konwersja():
             tabela_Prufera = []
-            tablica_lisci = liscie_od_najmniejszego_do_najwiekszego(OdczytZapis.bufor_tablica_wybranych_randomowych_od, OdczytZapis.tablica_wybranych_randomowych_do)
+            tablica_lisci = liscie_od_najmniejszego_do_najwiekszego(bufor_od, bufor_do)
             tablica_lisci_pomniejszana = tablica_lisci.copy()
             i = 0
             while i < len(OdczytZapis.tablica_nazw_wierzcholkow) - 2:
                 usuwany_element = tablica_lisci_pomniejszana[0]
-                dodawany_element = ten_z_ktorym_sie_laczy(usuwany_element)
+                dodawany_element = ten_z_ktorym_sie_laczy(usuwany_element, bufor_od, bufor_do)
                 tabela_Prufera.append(dodawany_element)
                 # bufor_od = jesli_obecny_to_usun(bufor_od, usuwany_element)
                 # bufor_do = jesli_obecny_to_usun(bufor_do, usuwany_element)
