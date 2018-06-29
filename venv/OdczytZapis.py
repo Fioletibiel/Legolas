@@ -164,12 +164,14 @@ class OdczytZapis(object):
     def randomowo_od():
         r_od = OdczytZapis.tablica_nazw_wierzcholkow[-1]
         OdczytZapis.tablica_wybranych_randomowych_od.append(r_od)
+        print("OdczytZapis.tablica_wybranych_randomowych_od: " + str(OdczytZapis.tablica_wybranych_randomowych_od))
         OdczytZapis.wybrana_randomowa_przed_chwila = r_od
         return r_od
 
     def randomowo_do():
         r_do = OdczytZapis.losowa_inna_niz_randomowo_od()
         OdczytZapis.tablica_wybranych_randomowych_do.append(r_do)
+        print("OdczytZapis.tablica_wybranych_randomowych_do: " + str(OdczytZapis.tablica_wybranych_randomowych_do))
         return r_do
 
     def gen_tree_plus_node():

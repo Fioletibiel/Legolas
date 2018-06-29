@@ -272,8 +272,8 @@ class TkinterGUI(object):
         # Opcjonalnie do zrobienia DOT2Prufer_konwersja():
         # ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-        bufor_od = OdczytZapis.tablica_wybranych_randomowych_od.copy()
-        bufor_do = OdczytZapis.tablica_wybranych_randomowych_do.copy()
+        bufor_od = OdczytZapis.tablica_wybranych_randomowych_od
+        bufor_do = OdczytZapis.tablica_wybranych_randomowych_do
         usuwany_element = 'a'
         def liscie_od_najmniejszego_do_najwiekszego(od, do):
             # wyciagniecie tablicy lisci:
@@ -301,42 +301,57 @@ class TkinterGUI(object):
                     if od[i] == od[j]:
                         k += 1
                 if k > 1:
-                    tablica_lisci.remove(od[i])
+                    if od[i] in tablica_lisci:
+                        tablica_lisci.remove(od[i])
             for i in range(len(do)):
                 k = 0
                 for j in range(len(do)):
                     if do[i] == do[j]:
                         k += 1
                 if k > 1:
-                    tablica_lisci.remove(do[i])
-            # posortowanie tablicy lisci:
-            tablica_lisci.sort()
+                    if do[i] in tablica_lisci:
+                        tablica_lisci.remove(do[i])
+            # od2 = list(set(od))
+            # od3 = od - od2
+            # od4 =
+            # do2 = list(set(do))
+            # do3 = do - do2
+            # tablica_lisci =
+            tablica_lisci.sort()    # posortowanie tablicy lisci
             return tablica_lisci
         def liscie_od_najmniejszego_do_najwiekszego_uaktualniana(od, do):
-            buf1, buf2 = 0
+            wtedy = False
+            k = 0
+            for i in range(len(od)):
+                # print("od["+str(i)+"]: " + str(od[i]))
+                # if od[i] == usuwany_element:  # jeśli którykolwiek wierzchołek 'od' jest równy usuwanemu wierzchołkowi, to usuwa się go ze zbioru wierzchołków 'od' oraz odpowiadającego mu wierzchołka ze zbioru wierzchołków 'do'...
+                #     od.remove(od[i])
+                #     do.remove(do[i])
+                if od[i] == usuwany_element:
+                    wtedy = True
+                    k = i
+            if wtedy == True:
+                od.remove(od[k])
+                do.remove(do[k])
+            wtedy = False
+            k = 0
+            for i in range(len(do)):
+                if do[i] == usuwany_element:  # to samo, co wyżej, tylko tym razem poczynając od zbioru wierzchołków 'do'...
+                    wtedy = True
+                    k = i
+            if wtedy == True:
+                od.remove(od[k])
+                do.remove(do[k])
+            tablica_lisci = liscie_od_najmniejszego_do_najwiekszego(od, do)  # uaktualnia tablicę liści z pomniejszonych zbiorów wierzchołków 'od' i 'do'.
+            return tablica_lisci
+        def ten_z_ktorym_sie_laczy(usuwany_element, od, do):
             for i in range(len(od)):
                 if od[i] == usuwany_element:
-                    bufor = i
+                    dodawany_element = do[i]
             for i in range(len(do)):
                 if do[i] == usuwany_element:
-                    bufor = i
-            od.remove(od[bufor])
-            do.remove(do[bufor])
-            tablica_lisci = liscie_od_najmniejszego_do_najwiekszego(od, do)
-            return tablica_lisci
-
-        def ten_z_ktorym_sie_laczy(usuwany_element):
-            bufor = 0
-            for i in range(len(OdczytZapis.tablica_wybranych_randomowych_od)):
-                if usuwany_element == OdczytZapis.tablica_wybranych_randomowych_od[i]:
-                    bufor = i
-            for i in range(len(OdczytZapis.tablica_wybranych_randomowych_do)):
-                if usuwany_element == OdczytZapis.tablica_wybranych_randomowych_do[i]:
-                    bufor = i
-            dodawany_element = OdczytZapis.tablica_wybranych_randomowych_do[bufor]
-            # ta funkcja do poprawy!!!
+                    dodawany_element = od[i]
             return dodawany_element
-
         def jesli_obecny_to_usun(lista, element):
             buf_lista = lista.copy()
             for i in range(len(lista)):
@@ -344,18 +359,25 @@ class TkinterGUI(object):
                     buf_lista.pop(i)
             return buf_lista
         def Pic2Prufer_konwersja():
+            # print("TkinterGUI.bufor_od: " + str(bufor_do))
+            # print("TkinterGUI.bufor_do: " + str(bufor_do))
             tabela_Prufera = []
-            tablica_lisci = liscie_od_najmniejszego_do_najwiekszego(OdczytZapis.bufor_tablica_wybranych_randomowych_od, OdczytZapis.tablica_wybranych_randomowych_do)
+            tablica_lisci = liscie_od_najmniejszego_do_najwiekszego(bufor_od, bufor_do)
             tablica_lisci_pomniejszana = tablica_lisci.copy()
+            print("\ntablica_lisci: "+str(tablica_lisci_pomniejszana))
             i = 0
             while i < len(OdczytZapis.tablica_nazw_wierzcholkow) - 2:
                 usuwany_element = tablica_lisci_pomniejszana[0]
-                dodawany_element = ten_z_ktorym_sie_laczy(usuwany_element)
+                print("usuwany_element_"+str(i)+": "+str(usuwany_element))
+                dodawany_element = ten_z_ktorym_sie_laczy(usuwany_element, bufor_od, bufor_do)
+                print("dodawany_element_"+str(i)+": "+str(dodawany_element))
                 tabela_Prufera.append(dodawany_element)
+                print("aktualny kod Prüfera: "+str(tabela_Prufera))
                 # bufor_od = jesli_obecny_to_usun(bufor_od, usuwany_element)
                 # bufor_do = jesli_obecny_to_usun(bufor_do, usuwany_element)
                 # tablica_lisci_pomniejszana = liscie_od_najmniejszego_do_najwiekszego(bufor_od, bufor_do)
                 tablica_lisci_pomniejszana = liscie_od_najmniejszego_do_najwiekszego_uaktualniana(bufor_od,bufor_do)
+                print("tablica_lisci_pomniejszana_"+str(i)+": " + str(tablica_lisci_pomniejszana)+"\n")
                 i += 1
             trescpliku = ' '.join(str(e) for e in tabela_Prufera)
             return trescpliku
