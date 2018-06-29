@@ -274,7 +274,21 @@ class TkinterGUI(object):
 
         bufor_od = OdczytZapis.tablica_wybranych_randomowych_od
         bufor_do = OdczytZapis.tablica_wybranych_randomowych_do
-        usuwany_element = 'a'
+        # usuwany_element = 'a'
+        def ten_z_ktorym_sie_laczy(usuwany_element, od, do):
+            for i in range(len(od)):
+                if od[i] == usuwany_element:
+                    dodawany_element = do[i]
+            for i in range(len(do)):
+                if do[i] == usuwany_element:
+                    dodawany_element = od[i]
+            return dodawany_element
+        def jesli_obecny_to_usun(lista, element):
+            buf_lista = lista.copy()
+            for i in range(len(lista)):
+                if lista[i]==element:
+                    buf_lista.pop(i)
+            return buf_lista
         def liscie_od_najmniejszego_do_najwiekszego(od, do):
             # wyciagniecie tablicy lisci:
             tablica_lisci = []
@@ -319,10 +333,10 @@ class TkinterGUI(object):
             # tablica_lisci =
             tablica_lisci.sort()    # posortowanie tablicy lisci
             return tablica_lisci
-        def liscie_od_najmniejszego_do_najwiekszego_uaktualniana(od, do):
+        def liscie_od_najmniejszego_do_najwiekszego_uaktualniana(usuwany_element, od, do):
             wtedy = False
             k = 0
-            for i in range(len(od)):
+            for i in range(len(od)):    # dla każdego wierzchołka w bazie 'od' sprawdzamy czy równa się usuwanemu elementowi, jeśli tak, to usuwa się go zarówno z 'od' i z 'do'...
                 # print("od["+str(i)+"]: " + str(od[i]))
                 # if od[i] == usuwany_element:  # jeśli którykolwiek wierzchołek 'od' jest równy usuwanemu wierzchołkowi, to usuwa się go ze zbioru wierzchołków 'od' oraz odpowiadającego mu wierzchołka ze zbioru wierzchołków 'do'...
                 #     od.remove(od[i])
@@ -331,53 +345,48 @@ class TkinterGUI(object):
                     wtedy = True
                     k = i
             if wtedy == True:
+                print("Usuwany element jest ze zbioru 'od', usuwamy krawędź: " + str(od[k]) + "-" + str(do[k]))
                 od.remove(od[k])
                 do.remove(do[k])
             wtedy = False
             k = 0
-            for i in range(len(do)):
-                if do[i] == usuwany_element:  # to samo, co wyżej, tylko tym razem poczynając od zbioru wierzchołków 'do'...
+            for i in range(len(do)):    # to samo, co wyżej, tylko tym razem poczynając od zbioru wierzchołków 'do'...
+                if do[i] == usuwany_element:
                     wtedy = True
                     k = i
             if wtedy == True:
+                print("Usuwany element jest ze zbioru 'do', usuwamy krawędź: " + str(od[k]) + "-" + str(do[k]))
                 od.remove(od[k])
                 do.remove(do[k])
+            print("Lista od: "+str(od))
+            print("Lista do: "+str(do))
             tablica_lisci = liscie_od_najmniejszego_do_najwiekszego(od, do)  # uaktualnia tablicę liści z pomniejszonych zbiorów wierzchołków 'od' i 'do'.
+            print("Tablica liści: "+str(tablica_lisci))
             return tablica_lisci
-        def ten_z_ktorym_sie_laczy(usuwany_element, od, do):
-            for i in range(len(od)):
-                if od[i] == usuwany_element:
-                    dodawany_element = do[i]
-            for i in range(len(do)):
-                if do[i] == usuwany_element:
-                    dodawany_element = od[i]
-            return dodawany_element
-        def jesli_obecny_to_usun(lista, element):
-            buf_lista = lista.copy()
-            for i in range(len(lista)):
-                if lista[i]==element:
-                    buf_lista.pop(i)
-            return buf_lista
         def Pic2Prufer_konwersja():
             # print("TkinterGUI.bufor_od: " + str(bufor_do))
             # print("TkinterGUI.bufor_do: " + str(bufor_do))
             tabela_Prufera = []
+            print("\nPoczątkowy bufor od: "+str(bufor_od))
+            print("Początkowy bufor do: " + str(bufor_do))
             tablica_lisci = liscie_od_najmniejszego_do_najwiekszego(bufor_od, bufor_do)
             tablica_lisci_pomniejszana = tablica_lisci.copy()
-            print("\ntablica_lisci: "+str(tablica_lisci_pomniejszana))
+            print("\nPoczątkowy bufor od: "+str(bufor_od))
+            print("Początkowy bufor do: " + str(bufor_do))
+            print("\nPoczątkowa tablica liści: "+str(tablica_lisci_pomniejszana)+"\n")
             i = 0
             while i < len(OdczytZapis.tablica_nazw_wierzcholkow) - 2:
                 usuwany_element = tablica_lisci_pomniejszana[0]
-                print("usuwany_element_"+str(i)+": "+str(usuwany_element))
+                print("Usuwany element "+str(i)+": "+str(usuwany_element))
                 dodawany_element = ten_z_ktorym_sie_laczy(usuwany_element, bufor_od, bufor_do)
-                print("dodawany_element_"+str(i)+": "+str(dodawany_element))
+                print("Dodawany element "+str(i)+": "+str(dodawany_element))
                 tabela_Prufera.append(dodawany_element)
-                print("aktualny kod Prüfera: "+str(tabela_Prufera))
+                print("Aktualny kod Prüfera: "+str(tabela_Prufera))
                 # bufor_od = jesli_obecny_to_usun(bufor_od, usuwany_element)
                 # bufor_do = jesli_obecny_to_usun(bufor_do, usuwany_element)
                 # tablica_lisci_pomniejszana = liscie_od_najmniejszego_do_najwiekszego(bufor_od, bufor_do)
-                tablica_lisci_pomniejszana = liscie_od_najmniejszego_do_najwiekszego_uaktualniana(bufor_od,bufor_do)
-                print("tablica_lisci_pomniejszana_"+str(i)+": " + str(tablica_lisci_pomniejszana)+"\n")
+                tablica_lisci_pomniejszana = liscie_od_najmniejszego_do_najwiekszego_uaktualniana(usuwany_element, bufor_od, bufor_do)
+                print("Aktualna tablica liści: " + str(tablica_lisci_pomniejszana)+"\n")
                 i += 1
             trescpliku = ' '.join(str(e) for e in tabela_Prufera)
             return trescpliku
@@ -399,10 +408,11 @@ class TkinterGUI(object):
         # ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
         def Tekst2Wynik_konwersja(tresc_pliku):
+
             tekst = tresc_pliku.split()
             n = tekst[0]
             m = tekst[1]
-            # print("n: "+str(n)+" i m: "+str(m))
+            print("n: "+str(n)+" i m: "+str(m))
             a = []
             b = []
             for i in range(len(tekst)):
@@ -412,13 +422,11 @@ class TkinterGUI(object):
                     b.append(tekst[i])
                 else:
                     pass
-            # print("Tabela a:")
-            # print(a)
-            # print("Tabela b:")
-            # print(b)
-
+            print("Tabela a:" + str(a))
+            print("Tabela b:" + str(b) + "\n")
             kopia_a = a
             kopia_b = b
+
             def odejmowanie_dwoch_tablic(a,b):
                 c = []
                 for i in range(len(a)):
@@ -429,38 +437,40 @@ class TkinterGUI(object):
                     if bool == True:
                         c.append(a[i])
                 return c
-            def aktualny_semestr(a,b,c,d):
-                prawidziwe_a = c
-                prawdziwe_b = d
-                kopia_a = a
-                kopia_b = b
-                tablica_semestru = []
-                tablica_sasiadow_semestru = []
-                for i in range(len(kopia_b)):
-                    bool = True
-                    for j in range(len(kopia_a)):
-                        if kopia_b[i] == kopia_a[j]:
-                            bool = False
-                    if bool == True:
-                        tablica_semestru.append(kopia_b[i])
-                        bufor = 0
-                        for k in range(len(prawdziwe_b)):
-                            if prawdziwe_b[k] == kopia_b[k]:
-                                bufor = k
-                        tablica_sasiadow_semestru.append(prawidziwe_a[k])
-                kopia_a = odejmowanie_dwoch_tablic(kopia_a,tablica_sasiadow_semestru)
-                kopia_b = odejmowanie_dwoch_tablic(kopia_b,tablica_semestru)
-                return tablica_semestru, kopia_a, kopia_b
-            licz = 1
-            bufor_tablica_semestru = []
-            while True:
-                tablica_semestru, kopia_a, kopia_b = aktualny_semestr(kopia_a, kopia_b, a, b)
-                if bufor_tablica_semestru != tablica_semestru:
-                    bufor_tablica_semestru = tablica_semestru
-                    print("Semestr "+str(licz)+": "+str(tablica_semestru))
-                    licz +=1
-                else:
-                    break
+
+            # def aktualny_semestr(a,b,c,d):
+            #     prawidziwe_a = c
+            #     prawdziwe_b = d
+            #     kopia_a = a
+            #     kopia_b = b
+            #     tablica_semestru = []
+            #     tablica_sasiadow_semestru = []
+            #     for i in range(len(kopia_b)):
+            #         bool = True
+            #         for j in range(len(kopia_a)):
+            #             if kopia_b[i] == kopia_a[j]:
+            #                 bool = False
+            #         if bool == True:
+            #             tablica_semestru.append(kopia_b[i])
+            #             bufor = 0
+            #             for k in range(len(prawdziwe_b)):
+            #                 if prawdziwe_b[k] == kopia_b[k]:
+            #                     bufor = k
+            #             tablica_sasiadow_semestru.append(prawidziwe_a[k])
+            #     kopia_a = odejmowanie_dwoch_tablic(kopia_a,tablica_sasiadow_semestru)
+            #     kopia_b = odejmowanie_dwoch_tablic(kopia_b,tablica_semestru)
+            #     return tablica_semestru, kopia_a, kopia_b
+            #
+            # licz = 1
+            # bufor_tablica_semestru = []
+            # while True:
+            #     tablica_semestru, kopia_a, kopia_b = aktualny_semestr(kopia_a, kopia_b, a, b)
+            #     if bufor_tablica_semestru != tablica_semestru:
+            #         bufor_tablica_semestru = tablica_semestru
+            #         print("Semestr "+str(licz)+": "+str(tablica_semestru))
+            #         licz +=1
+            #     else:
+            #         break
 
             # DOT = "graph {\n"
             # for i in range(len(a)):
@@ -477,7 +487,7 @@ class TkinterGUI(object):
             #     print(i)
             g = {}
             for i in range(len(a)):
-                g[b[i]]=a[i]
+                g[b[i]] = a[i]
 
             def cyclic(g):
                 path = set()
@@ -493,17 +503,19 @@ class TkinterGUI(object):
                     path.remove(vertex)
                     return False
                 return any(visit(v) for v in g)
+
             cykliczny = cyclic(g)
             if cykliczny == True:
                 wynik = "nie"
             elif cykliczny == False:
                 wynik = "tak"
             return wynik
+
         def Tekst2Wynik():
             plik_kursy = filedialog.askopenfilename(filetypes=(("Text Documents", "*.txt"), ("DOT Files", "*.dot"), ("All files", "*.*")), title="Proszę wybierz plik z listą kursów.")
             if plik_kursy:
                 try:
-                    print("Plik został wczytany pomyślnie.")
+                    print("\n-------------------------------\nPlik został wczytany pomyślnie.")
                 except:
                     showerror("Open Source File", "Failed to read file\n'%s'" % plik_kursy)
             with open(plik_kursy, 'r') as myfile:
@@ -520,9 +532,6 @@ class TkinterGUI(object):
             else:
                 print("Coś poszło nie tak :/")
 
-        # Do zrobienia:
-        # 1) Poprawić Pic2Prüfer():
-        # 2) Sprawdzić, czy Tekst2Wynik działa poprawnie na większych drzewach, ponieważ te przykładowe Michała coś u mnie nie działały...
         # ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
         menu = Menu(self.root)
@@ -563,9 +572,13 @@ class TkinterGUI(object):
             tlo.image = img_update
             OdczytZapis.node_name = 'a'
             OdczytZapis.l_ggn = 0
+            OdczytZapis.l_gge = 0
+            OdczytZapis.l_random = 0
             OdczytZapis.g = Graph(format='png')
             OdczytZapis.tablica_nazw_wierzcholkow = []
             OdczytZapis.tablica_wybranych_przed_chwila = []
+            OdczytZapis.tablica_wybranych_randomowych_od = []
+            OdczytZapis.tablica_wybranych_randomowych_do = []
 
         self.root.bind("<Button-1>", nastepny_wierzcholek)
         self.root.bind("<Button-3>", reset_tla)
